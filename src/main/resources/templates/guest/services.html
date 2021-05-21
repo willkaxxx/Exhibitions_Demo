@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title th:text="#{services}"></title>
+</head>
+<body>
+<h1 th:text="#{hello.services}"></h1>
+<table border="1" style="width:300px">
+    <tr th:each="exhibition : ${services}">
+        <td th:text="${exhibition.getServiceName()}"></td>
+        <td th:text="${exhibition.getCost()}"></td>
+        <td th:text="${exhibition.getDescription()}"></td>
+        <td>
+            <a th:text="#{services.seeMasters.link}"
+               th:href="@{/serviceMasters(id = ${exhibition.getId()}, sName = ${exhibition.getServiceName()})}"></a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

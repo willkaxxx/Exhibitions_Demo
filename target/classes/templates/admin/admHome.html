@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html th:lang="#{lang}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title th:text="#{site.name}"></title>
+</head>
+<body>
+<h1 th:text="#{hello.message}"></h1>
+
+<p><a th:text="#{adm.manageHalls}" th:href="@{/adm/manage/halls}"></a></p>
+<p><a th:text="#{adm.manageExhibitions}" th:href="@{/adm/manage/exhibitions}"></a></p>
+
+</body>
+</html>

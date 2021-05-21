@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title></title>
+</head>
+<body>
+Manage halls
+<table border="1" cellpadding="4" cellspacing="1">
+    <tbody>
+    <tr th:each="item : ${list}">
+        <td th:text="${item.getId()}">id</td>
+        <td th:text="${item.getAddress()}">Address</td>
+        <td>
+            <a th:href="@{/adm/manage/halls/edit(id=${item.getId()})}">Edit</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div>
+        <span th:each="i: ${#numbers.sequence(1, page.getTotalPages())}">
+            <a th:type="button" th:href="@{/adm/manage/halls(page=${i})}" th:disabled="${currentPage == i}"
+               type="submit" name="submit" th:value="i" class="link-button">[[${i}]]</a>
+        </span>
+</div>
+<a th:href="@{/adm/manage/halls/edit(id=-1)}">Create new hall</a>
+</body>
+</html>

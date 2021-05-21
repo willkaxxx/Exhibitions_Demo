@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title th:text="#{masters}"></title>
+</head>
+<body>
+<h1 th:text="#{hello.masters}"></h1>
+<table border="1" style="width:300px">
+    <tr th:each="master : ${masters}">
+        <td th:text="${master.getName()}"></td>
+        <td th:text="${master.getSurname()}"></td>
+        <td>
+            <a th:text="#{masters.seeServices.link}" th:href="@{/masterServices(id = ${master.getId()}, mName = ${master.getName()})}"></a>
+        </td>
+<!--        <td th:text="${master.getAuthorities()}" sec:authorize="hasAuthority('CLIENT')"></td>-->
+    </tr>
+</table>
+</body>
+</html>
