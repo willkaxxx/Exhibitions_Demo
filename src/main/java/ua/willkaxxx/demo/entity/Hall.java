@@ -16,4 +16,15 @@ public class Hall {
     private String address;
     @ManyToMany(mappedBy = "halls")
     private List<Exhibition> exhibitions;
+
+    public Hall(Long id){
+        this.id = id;
+    }
+
+    public Hall(){
+    }
+
+    public String toString(){
+        return id.toString() + " " + address;
+    }
 }

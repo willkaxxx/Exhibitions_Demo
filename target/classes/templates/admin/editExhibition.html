@@ -11,28 +11,28 @@
     <input type="number" name="cost" th:value="${exhibition.getCost()}"><br>
     <input type="datetime-local" name="beginning" th:value="${exhibition.getStringBeginning()}"><br>
     <input type="datetime-local" name="end" th:value="${exhibition.getStringEnd()}"><br>
-    <div th:switch="${exhibition.getId()}">
-        <p th:case="null"><button type="submit">Create</button></p>
-        <p th:case="*"><button type="submit">Update</button></p>
-    </div>
-    <table th:hidden="${list.isEmpty()}" th:name="halls" border="1" cellpadding="4" cellspacing="1">
+    <table th:if="${not list.isEmpty()}" border="1" cellpadding="4" cellspacing="1">
         <tbody>
         <tr th:each="item : ${list}">
-            <td th:text="${item.getId()}">id</td>
-            <td th:text="${item.getAddress()}">Address</td>
-            <td><input type="radio"></td>
+            <td th:text="${item.getId()}"></td>
+            <td th:text="${item.getAddress()}"></td>
+            <td><a th:href="@{/adm/manage/exhibitions/edit/deleteHall(hallId=${item.getId()},exhibitionId=${exhibition.getId()})}"></a></td>
+            <td hidden="hidden"><input th:name="httpHallsID" th:value="${item.getId()}"></td>
         </tr>
         </tbody>
         <div th:hidden="${page.getTotalPages() < 2}">
         <span th:each="i: ${#numbers.sequence(1, page.getTotalPages())}">
-            <a th:href="@{/adm/manage/exhibitions/edit(id=${exhibition.getId()}, hallPage=${i})}" th:disabled="${currentPage == i}"
-               name="submit" th:value="i" class="link-button">[[${i}]]</a>
+            <a th:href="@{/adm/manage/exhibitions/edit(id=${exhibition.getId()}, hallPage=${i})}" th:disabled="${currentPage == i}">[[${i}]]</a>
         </span>
         </div>
     </table>
+    <div th:switch="${exhibition.getId()}">
+        <p th:case="null"><button type="submit" th:text="#{common.create}"></button></p>
+        <p th:case="*"><button type="submit" th:text="#{common.update}"></button></p>
+    </div>
 </form>
 <form th:action="@{/adm/manage/exhibitions/delete(id=${exhibition.getId()})}" method="post">
-    <button th:hidden="${exhibition.getId()} == null" type="submit">Delete</button>
+    <button th:hidden="${exhibition.getId()} == null" type="submit" th:text="#{common.delete}"></button>
 </form>
 </body>
 </html>

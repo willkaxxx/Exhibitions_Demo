@@ -6,16 +6,16 @@
     <title></title>
 </head>
 <body>
-<p>Manage exhibitions</p>
+<p th:text="#{manageExhibitions.header}"></p>
 <table border="1" cellpadding="4" cellspacing="1">
     <tbody>
     <tr>
-        <td><span>ID</span></td>
-        <td><span>Name</span></td>
-        <td><span>Subject</span></td>
-        <td><span>Cost</span></td>
-        <td><span>Beginning</span></td>
-        <td><span>End</span></td>
+        <td><span th:text="#{manageExhibitions.id}"></span></td>
+        <td><span th:text="#{manageExhibitions.name}"></span></td>
+        <td><span th:text="#{manageExhibitions.subject}"></span></td>
+        <td><span th:text="#{manageExhibitions.cost}"></span></td>
+        <td><span th:text="#{manageExhibitions.beginning}"></span></td>
+        <td><span th:text="#{manageExhibitions.end}"></span></td>
     </tr>
     <tr th:each="item : ${list}">
         <td th:text="${item.getId()}"></td>
@@ -25,17 +25,16 @@
         <td><input type="datetime-local" readonly="readonly" th:value="${item.getStringBeginning()}"></td>
         <td><input type="datetime-local" readonly="readonly" th:value="${item.getStringEnd()}"></td>
         <td>
-            <a th:href="@{/adm/manage/exhibitions/edit(id=${item.getId()})}">Edit</a>
+            <a th:href="@{/adm/manage/exhibitions/edit(id=${item.getId()})}" th:text="#{common.edit}"></a>
         </td>
     </tr>
     </tbody>
 </table>
 <div>
         <span th:each="i: ${#numbers.sequence(1, page.getTotalPages())}">
-            <a th:href="@{/adm/manage/exhibitions(page=${i})}" th:disabled="${currentPage == i}"
-               type="submit" name="submit" th:value="i" class="link-button">[[${i}]]</a>
+            <a th:href="@{/adm/manage/exhibitions(page=${i})}" th:hidden="${currentPage == i}">[[${i}]]</a>
         </span>
 </div>
-<p><a th:href="@{/adm/manage/exhibitions/edit(id=-1)}">Create new hall</a></p>
+<p><a th:href="@{/adm/manage/exhibitions/edit(id=-1)}" th:text="#{manageExhibitions.createNew}"></a></p>
 </body>
 </html>

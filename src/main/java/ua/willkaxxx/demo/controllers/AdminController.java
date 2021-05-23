@@ -15,9 +15,12 @@ import ua.willkaxxx.demo.repository.ExhibitionRepository;
 import ua.willkaxxx.demo.repository.HallRepository;
 import ua.willkaxxx.demo.repository.UserRepository;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/adm")
@@ -77,18 +80,31 @@ public class AdminController {
     public String createExhibition(Model model, @RequestParam(name = "id") Long id, @RequestParam(name = "hallPage") Optional<Integer> curHallPage) {
         Exhibition exhibition = exhibitionRepository.findById(id).orElse(new Exhibition());
         model.addAttribute("exhibition", exhibition);
-        Pageable pageable = PageRequest.of(curHallPage.orElse(1) - 1, 5);
-        Page<Hall> halls = hallRepository.findAllByExhibitions(exhibition, pageable);
-        model.addAttribute("page", halls);
-        model.addAttribute("list", halls.getContent());
-        model.addAttribute("currentPage", curHallPage.orElse(1));
-        model.addAttribute("origin", exhibition);
+        if (id > 0) {
+            Pageable pageable = PageRequest.of(curHallPage.orElse(1) - 1, 5);
+            Page<Hall> halls = hallRepository.findAllByExhibitions(exhibition, pageable);
+            model.addAttribute("page", halls);
+            model.addAttribute("list", halls.getContent());
+            model.addAttribute("currentPage", curHallPage.orElse(1));
+        } else
+            model.addAttribute("list", new ArrayList<Hall>());
         return "/admin/editExhibition";
+    }
+
+    @GetMapping("/manage/exhibitions/edit/deleteHall")
+    public String deleteExhibitionHall(@RequestParam(name = "hallId") Long hallId, @RequestParam(name = "exhibitionId") Long exhibitionId) {
+        Exhibition exhibition = exhibitionRepository.findById(exhibitionId).orElse(new Exhibition());
+        exhibition.setHalls(exhibition.getHalls().stream().filter(a -> !a.getId().equals(hallId)).collect(Collectors.toList()));
+        System.out.println(exhibition.getHalls().size());
+        exhibitionRepository.save(exhibition);
+        return "redirect:/adm/manage/exhibitions/edit?id=" + exhibitionId;
     }
 
     @PostMapping("/manage/exhibitions/edit")
     public String postManageExhibition(Exhibition exhibition) {
-        System.out.println(exhibition.toString());
+        if (exhibition.getHttpHallsID() != null)
+            exhibition.setHalls(exhibition.getHttpHallsID().stream().map(Hall::new).collect(Collectors.toList()));
+        exhibitionRepository.save(exhibition);
         return "redirect:/adm/manage/exhibitions";
     }
 

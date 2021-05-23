@@ -5,24 +5,27 @@
     <title></title>
 </head>
 <body>
-Manage halls
+<p th:text="#{manageHalls.header}"></p>
 <table border="1" cellpadding="4" cellspacing="1">
     <tbody>
+    <tr>
+        <td th:text="#{manageHalls.id}"></td>
+        <td th:text="#{manageHalls.address}"></td>
+    </tr>
     <tr th:each="item : ${list}">
-        <td th:text="${item.getId()}">id</td>
-        <td th:text="${item.getAddress()}">Address</td>
+        <td th:text="${item.getId()}"></td>
+        <td th:text="${item.getAddress()}"></td>
         <td>
-            <a th:href="@{/adm/manage/halls/edit(id=${item.getId()})}">Edit</a>
+            <a th:href="@{/adm/manage/halls/edit(id=${item.getId()})}" th:text="#{common.edit}"></a>
         </td>
     </tr>
     </tbody>
 </table>
 <div>
-        <span th:each="i: ${#numbers.sequence(1, page.getTotalPages())}">
-            <a th:type="button" th:href="@{/adm/manage/halls(page=${i})}" th:disabled="${currentPage == i}"
-               type="submit" name="submit" th:value="i" class="link-button">[[${i}]]</a>
-        </span>
+    <span th:if="${page.getTotalPages()} > 1" th:each="i: ${#numbers.sequence(1, page.getTotalPages())}">
+        <a th:type="button" th:href="@{/adm/manage/halls(page=${i})}" th:disabled="${currentPage == i}">[[${i}]]</a>
+    </span>
 </div>
-<a th:href="@{/adm/manage/halls/edit(id=-1)}">Create new hall</a>
+<p><a th:href="@{/adm/manage/halls/edit(id=-1)}" th:text="#{manageHalls.createNew}"></a></p>
 </body>
 </html>

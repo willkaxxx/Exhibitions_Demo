@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,8 @@ public class Exhibition implements Serializable {
     private List<Hall> halls;
     @ManyToMany(mappedBy = "exhibitions")
     private List<User> users;
+    @Transient
+    private List<Long> httpHallsID;
 
     public String getStringBeginning(){
         return beginning.toString().replace(' ', 'T').substring(0, 16);

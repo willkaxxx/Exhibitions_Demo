@@ -8,8 +8,8 @@
 <form th:action="@{/adm/manage/halls/edit(id=${hall.getId()})}" method="post">
     <input type="text" name="address" th:value="${hall.getAddress()}">
     <div th:switch="${hall.getId()}">
-        <p th:case="null"><button type="submit">Create</button></p>
-        <p th:case="*"><button type="submit">Update</button></p>
+        <p th:case="null"><button type="submit" th:text="#{common.create}"></button></p>
+        <p th:case="*"><button type="submit" th:text="#{common.update}"></button></p>
     </div>
 </form>
 </body>
