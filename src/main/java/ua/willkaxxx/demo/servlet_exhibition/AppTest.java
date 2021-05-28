@@ -6,6 +6,7 @@ import ua.willkaxxx.demo.servlet_exhibition.model.dao.HallDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.UserDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCUserDao;
+import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 
@@ -20,7 +21,7 @@ public class AppTest {
         HallDao hallDao = JDBCDaoFactory.getInstance().createHallDao();
         UserDao userDao = JDBCDaoFactory.getInstance().createUserDao();
         ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao();
-        for(User u : userDao.findAll()){
+        for(Exhibition u : exhibitionDao.findAll()){
             log.info(u);
         }
 //        hallDao.create(hall);

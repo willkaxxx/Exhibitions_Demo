@@ -99,8 +99,17 @@ public class Exhibition {
                 ", end=" + end +
                 ", cost=" + cost +
                 ", canceled=" + canceled +
+//                ", users number=\n" + users +
+//                ", halls number=\n" + halls+
                 ", users number=" + users.size() +
                 ", halls number=" + halls.size() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Exhibition)
+            return this.toString().equals(obj.toString());
+        return false;
     }
 }

@@ -71,4 +71,11 @@ public class User {
                 ", exhibitions number=" + exhibitions.size() +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof User)
+            return this.toString().equals(obj.toString());
+        return false;
+    }
 }

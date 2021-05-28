@@ -92,20 +92,19 @@ public class JDBCUserDao implements UserDao {
                 "left join exhibitions e on eu.exhibitions_id = e.exhibition_id;";
         try (Statement statement = connection.createStatement()) {
             Map<Integer, User> userMap = new HashMap<>();
-            Map<Integer, Exhibition> exhibitionMap = new HashMap<>();
             ResultSet rs = statement.executeQuery(query);
             UserMapper userMapper = new UserMapper();
             ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
             while (rs.next()) {
                 User user = userMapper
                         .extractFromResultSet(rs);
-                Exhibition exhibition = exhibitionMapper
-                        .extractFromResultSet(rs);
                 user = userMapper
                         .makeUnique(userMap, user);
-                exhibition = exhibitionMapper
-                        .makeUnique(exhibitionMap, exhibition);
-                user.getExhibitions().add(exhibition);
+                Exhibition exhibition = exhibitionMapper
+                        .extractFromResultSet(rs);
+                if(!user.getExhibitions().contains(exhibition) && exhibition.getId() > 0){
+                    user.getExhibitions().add(exhibition);
+                }
             }
             return new ArrayList<>(userMap.values());
         } catch (SQLException e) {

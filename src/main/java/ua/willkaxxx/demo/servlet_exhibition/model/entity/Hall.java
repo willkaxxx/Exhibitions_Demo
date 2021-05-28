@@ -41,4 +41,11 @@ public class Hall {
                 ", exhibitions number=" + exhibitions.size() +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Hall)
+            return this.toString().equals(obj.toString());
+        return false;
+    }
 }

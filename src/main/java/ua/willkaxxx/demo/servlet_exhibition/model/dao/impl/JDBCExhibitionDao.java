@@ -2,7 +2,6 @@ package ua.willkaxxx.demo.servlet_exhibition.model.dao.impl;
 
 import org.apache.log4j.Logger;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.ExhibitionDao;
-import ua.willkaxxx.demo.servlet_exhibition.model.dao.UserDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.mapper.ExhibitionMapper;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.mapper.HallMapper;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.mapper.UserMapper;
@@ -113,8 +112,6 @@ public class JDBCExhibitionDao implements ExhibitionDao {
                 "left join exhibitions_users eu on e.exhibition_id = eu.exhibitions_id " +
                 "left join users u on eu.users_id = u.user_id;";
         try (Statement statement = connection.createStatement()) {
-            Map<Integer, Hall> hallMap = new HashMap<>();
-            Map<Integer, User> userMap = new HashMap<>();
             Map<Integer, Exhibition> exhibitionMap = new HashMap<>();
             ResultSet rs = statement.executeQuery(query);
             HallMapper hallMapper = new HallMapper();
@@ -127,11 +124,13 @@ public class JDBCExhibitionDao implements ExhibitionDao {
                         .extractFromResultSet(rs);
                 User user = userMapper
                         .extractFromResultSet(rs);
-                hall = hallMapper.makeUnique(hallMap, hall);
-                user = userMapper.makeUnique(userMap, user);
                 exhibition = exhibitionMapper.makeUnique(exhibitionMap, exhibition);
-                exhibition.getUsers().add(user);
-                exhibition.getHalls().add(hall);
+                if(!exhibition.getUsers().contains(user) && user.getId() > 0){
+                    exhibition.getUsers().add(user);
+                }
+                if(!exhibition.getHalls().contains(hall) && hall.getId() > 0){
+                    exhibition.getHalls().add(hall);
+                }
             }
             return new ArrayList<>(exhibitionMap.values());
         } catch (SQLException e) {
@@ -143,12 +142,48 @@ public class JDBCExhibitionDao implements ExhibitionDao {
 
     @Override
     public void update(Exhibition entity) {
+        final String query = "update exhibitions set beginning = ? , canseled = ?, cost = ?, end = ?, exhibition_name = ?, subject = ?;";
+        final String joinHallQuery = "insert ignore into exhibitions_halls values (?, ?);";
+        final String joinUserQuery = "insert ignore into exhibitions_users values (?, ?);";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             PreparedStatement joinHallStatement = connection.prepareStatement(joinHallQuery);
+        PreparedStatement joinUserStatement = connection.prepareStatement(joinUserQuery)) {
+            connection.setAutoCommit(false);
+            preparedStatement.setTimestamp(1, entity.getBeginning());
+            preparedStatement.setBoolean(2, entity.isCanceled());
+            preparedStatement.setBigDecimal(2, entity.getCost());
+            preparedStatement.setTimestamp(2, entity.getEnd());
+            preparedStatement.setString(2, entity.getName());
+            preparedStatement.setString(2, entity.getSubject());
+            preparedStatement.execute();
 
+            joinHallStatement.setInt(1, entity.getId());
+            joinUserStatement.setInt(1, entity.getId());
+            for(Hall ex : entity.getHalls()){
+                joinHallStatement.setInt(2, ex.getId());
+                joinHallStatement.execute();
+            }
+            for(User ex : entity.getUsers()){
+                joinUserStatement.setInt(2, ex.getId());
+                joinUserStatement.execute();
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(int id) {
-
+        final String query = "delete from exhibitions where exhibition_id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
     }
 
     @Override

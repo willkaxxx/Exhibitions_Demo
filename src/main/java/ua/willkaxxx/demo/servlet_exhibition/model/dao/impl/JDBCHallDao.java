@@ -90,20 +90,19 @@ public class JDBCHallDao implements HallDao {
                 "left join exhibitions h on eh.exhibitions_id = h.exhibition_id;";
         try (Statement statement = connection.createStatement()) {
             Map<Integer, Hall> hallMap = new HashMap<>();
-            Map<Integer, Exhibition> exhibitionMap = new HashMap<>();
             ResultSet rs = statement.executeQuery(query);
             HallMapper hallMapper = new HallMapper();
             ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
             while (rs.next()) {
                 Hall hall = hallMapper
                         .extractFromResultSet(rs);
-                Exhibition exhibition = exhibitionMapper
-                        .extractFromResultSet(rs);
                 hall = hallMapper
                         .makeUnique(hallMap, hall);
-                exhibition = exhibitionMapper
-                        .makeUnique(exhibitionMap, exhibition);
-                hall.getExhibitions().add(exhibition);
+                Exhibition exhibition = exhibitionMapper
+                        .extractFromResultSet(rs);
+                if(!hall.getExhibitions().contains(exhibition) && exhibition.getId() > 0){
+                    hall.getExhibitions().add(exhibition);
+                }
             }
             return new ArrayList<>(hallMap.values());
         } catch (SQLException e) {
