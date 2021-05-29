@@ -8,7 +8,9 @@ import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCUserDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
+import ua.willkaxxx.demo.servlet_exhibition.model.entity.Role;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
+import ua.willkaxxx.demo.servlet_exhibition.model.services.UserService;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,12 +19,12 @@ public class AppTest {
 
     private static final Logger log = Logger.getLogger(AppTest.class);
     public static void main(String[] args) throws SQLException {
+//        UserService userService = new UserService();
+//        User user = new User();
+//        user.setEmail("email");
+//        user.setPassword("pawwss");
+//        user.setRole(Role.Admin);
+//        log.info(userService.createUser(user));
 
-        HallDao hallDao = JDBCDaoFactory.getInstance().createHallDao();
-        UserDao userDao = JDBCDaoFactory.getInstance().createUserDao();
-        ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao();
-        Hall newHall = new Hall();
-        newHall.setAddress("Exhibition center");
-        hallDao.create(newHall);
     }
 }

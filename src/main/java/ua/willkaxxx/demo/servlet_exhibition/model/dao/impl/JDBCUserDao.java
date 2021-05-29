@@ -18,7 +18,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public void create(User entity){
+    public void create(User entity) throws SQLException {
         final String createQuery = "insert into users (email, expired, password, role) values (?,?,?,?);";
         final String joinQuery = "insert ignore into exhibitions_users values (?, ?);";
         final String findId = "SELECT LAST_INSERT_ID();";
@@ -45,14 +45,14 @@ public class JDBCUserDao implements UserDao {
             connection.setAutoCommit(true);
             log.info("Inserted into db: " + entity);
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException ex) {
                 log.error("Error while rollback");
-                throw new RuntimeException(ex);
+                throw new RuntimeException();
             }
-            e.printStackTrace();
+            throw e;
         }
     }
 

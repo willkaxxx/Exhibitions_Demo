@@ -1,3 +1,4 @@
+
 <%--
   Created by IntelliJ IDEA.
   User: willk
@@ -12,8 +13,9 @@
 </head>
 <body>
     <form action="${pageContext.request.contextPath}/exhibitions/registration" method="post">
-        <p>Email<input type="email" name="email"></p><span><%= request.getAttribute("error")%></span>
-        <p>Password<input type="text" name="pass"></p>
+        <p>Email <input type="email" name="email"> ${reg_email_error}</p>
+        <p>Password<input type="text" name="pass"> ${reg_pass_error}</p>
+        <p>${exist_error}</p>
         <p><button type="submit">Register</button></p>
     </form>
 </body>

@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1><%= "Hello World!" %></h1>
-<a href="${pageContext.request.contextPath}/user/registration.jsp">registration</a>
+<a href="${pageContext.request.contextPath}exhibitions/redirect:/user/registration.jsp">registration</a>
 <br/>
 </body>
 </html>

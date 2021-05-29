@@ -1,11 +1,13 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller;
 
+import org.apache.log4j.Logger;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Registration;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 //@WebServlet(name = "Servlet", value = "/*")
 public class Servlet extends HttpServlet {
-    //    private final Logger log = Logger.getLogger(Servlet.class);
+    private final Logger log = Logger.getLogger(Servlet.class);
     private Map<String, Command> commands = new HashMap<>();
 
     public void init() {
@@ -24,8 +26,7 @@ public class Servlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String path = request.getRequestURI();
-        response.sendRedirect(path);
+        processRequest(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -36,18 +37,28 @@ public class Servlet extends HttpServlet {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        System.out.println(path);
         path = path.replaceAll(".*/exhibitions/", "");
-        System.out.println(path);
-        Command command = commands.getOrDefault(path,
-                (r) -> "/index.jsp)");
-        String page = command.execute(request);
-        if (page.contains("redirect:")) {
-            System.out.println("redirect");
-            response.sendRedirect(page.replace("redirect:", "/"));
+        log.info("Path = " + path);
+//        if (path.contains("forward:")) {
+//            log.info("forward -> " + path.replace("forward:", "/"));
+//            request.getRequestDispatcher(path.replace("forward:", "/")).forward(request, response);
+//            return;
+//        }
+
+
+        Optional<Command> command = Optional.ofNullable(commands.get(path));
+//        Command command = commands.getOrDefault(path,
+//                (req, res) -> "/index.jsp");
+        if (command.isPresent()){
+            log.info("command -> " + path.replace("command:", ""));
+            path = command.get().execute(request, response);
+        }
+        if (path.contains("redirect:")) {
+            log.info("redirect -> " + path.replace("redirect:", ""));
+            response.sendRedirect(path.replace("redirect:", ""));
         } else {
-            System.out.println("forwarded");
-            request.getRequestDispatcher(page).forward(request, response);
+            log.info("forward -> " + path);
+            request.getRequestDispatcher(path).forward(request, response);
         }
     }
 }
