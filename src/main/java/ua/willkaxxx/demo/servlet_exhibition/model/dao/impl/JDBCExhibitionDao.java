@@ -170,6 +170,12 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                log.error("Error while rollback");
+                throw new RuntimeException(ex);
+            }
             log.error(e.getMessage(), e);
             e.printStackTrace();
         }

@@ -21,18 +21,8 @@ public class AppTest {
         HallDao hallDao = JDBCDaoFactory.getInstance().createHallDao();
         UserDao userDao = JDBCDaoFactory.getInstance().createUserDao();
         ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao();
-        for(Exhibition u : exhibitionDao.findAll()){
-            log.info(u);
-        }
-//        hallDao.create(hall);
-//        List<Hall> halls = hallDao.findAll();
-//        Hall hl = hallDao.findById(2).orElse(null);
-//        Hall nn = new Hall();
-//        hallDao.create(nn);
-//        log.info(nn);
-//        for(Hall h : halls){
-//            log.info(h);
-//        }
-//        log.info(halls.size());
+        Hall newHall = new Hall();
+        newHall.setAddress("Exhibition center");
+        hallDao.create(newHall);
     }
 }

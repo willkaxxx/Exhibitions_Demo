@@ -5,19 +5,8 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
+<h1><%= "Hello World!" %></h1>
+<a href="${pageContext.request.contextPath}/user/registration.jsp">registration</a>
 <br/>
-<a href="helloServlet">Hello Servlet</a>
-<hr/>
-<form action = "helloServlet" method = "get" >
-    <input type = "submit" value = "REQUEST" />
-</form>
-<br>
-<a href="helloServlet2">Hello Servlet2</a>
-<hr/>
-<form action = "helloServlet2" method = "get" >
-    <input type = "submit" value = "REQUEST" />
-</form>
 </body>
 </html>
