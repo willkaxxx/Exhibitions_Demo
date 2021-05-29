@@ -7,6 +7,7 @@
 <body>
 <h1><%= "Hello World!" %></h1>
 <a href="${pageContext.request.contextPath}exhibitions/redirect:/user/registration.jsp">registration</a>
+<a href="${pageContext.request.contextPath}exhibitions/redirect:/user/login.jsp">login</a>
 <br/>
 </body>
 </html>

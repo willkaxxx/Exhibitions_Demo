@@ -86,6 +86,34 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
+    public Optional<User> findByEmail(String email){
+        final String query = "select u.*, e.* from users u " +
+                "left join exhibitions_users eu on u.user_id = eu.users_id " +
+                "left join exhibitions e on eu.exhibitions_id = e.exhibition_id " +
+                "where u.email = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            Map<Integer, Exhibition> exhibitionMap = new HashMap<>();
+            preparedStatement.setString(1, email);
+            ResultSet rs = preparedStatement.executeQuery();
+            UserMapper userMapper = new UserMapper();
+            ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
+            User user = new User();
+            while (rs.next()) {
+                if (user.getId() < 1) {
+                    user = userMapper.extractFromResultSet(rs);
+                }
+                Exhibition exhibition = exhibitionMapper.extractFromResultSet(rs);
+                exhibitionMapper.makeUnique(exhibitionMap, exhibition);
+            }
+            user.setExhibitions(new ArrayList<>(exhibitionMap.values()));
+            return Optional.of(user);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public List<User> findAll() {
         final String query = "select u.*, e.* from users u " +
                 "left join exhibitions_users eu on u.user_id = eu.users_id " +

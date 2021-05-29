@@ -2,6 +2,7 @@ package ua.willkaxxx.demo.servlet_exhibition.controller;
 
 import org.apache.log4j.Logger;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Login;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Registration;
 
 import java.io.*;
@@ -21,7 +22,7 @@ public class Servlet extends HttpServlet {
 
     public void init() {
 //        commands.put("logout", new LogOut());
-//        commands.put("login", new Login());
+        commands.put("login", new Login());
         commands.put("registration", new Registration());
     }
 
@@ -39,20 +40,14 @@ public class Servlet extends HttpServlet {
         String path = request.getRequestURI();
         path = path.replaceAll(".*/exhibitions/", "");
         log.info("Path = " + path);
-//        if (path.contains("forward:")) {
-//            log.info("forward -> " + path.replace("forward:", "/"));
-//            request.getRequestDispatcher(path.replace("forward:", "/")).forward(request, response);
-//            return;
-//        }
 
 
         Optional<Command> command = Optional.ofNullable(commands.get(path));
-//        Command command = commands.getOrDefault(path,
-//                (req, res) -> "/index.jsp");
         if (command.isPresent()){
             log.info("command -> " + path.replace("command:", ""));
-            path = command.get().execute(request, response);
+            path = command.get().execute(request);
         }
+
         if (path.contains("redirect:")) {
             log.info("redirect -> " + path.replace("redirect:", ""));
             response.sendRedirect(path.replace("redirect:", ""));

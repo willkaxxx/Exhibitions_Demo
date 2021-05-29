@@ -5,6 +5,7 @@ import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class UserService {
     public int createUser(User user) throws SQLException {
@@ -12,5 +13,11 @@ public class UserService {
             userDao.create(user);
         }
         return user.getId();
+    }
+
+    public Optional<User> findUser(String email){
+        try(UserDao userDao = JDBCDaoFactory.getInstance().createUserDao()){
+            return userDao.findByEmail(email);
+        }
     }
 }

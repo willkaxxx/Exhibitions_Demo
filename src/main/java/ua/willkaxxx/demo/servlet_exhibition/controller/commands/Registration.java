@@ -14,7 +14,7 @@ public class Registration implements Command {
     UserService userService = new UserService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request) {
         User user = new User();
         boolean dataValid = true;
         if (request.getParameter("email").length() < 2) {
