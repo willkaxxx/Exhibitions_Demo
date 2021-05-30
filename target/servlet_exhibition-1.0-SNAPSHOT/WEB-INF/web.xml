@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    <servlet>
-        <servlet-name>ServletName</servlet-name>
-        <servlet-class>ua.willkaxxx.demo.servlet_exhibition.controller.Servlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ServletName</servlet-name>
-        <url-pattern>/exhibitions/*</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>ServletName</servlet-name>-->
+<!--        <servlet-class>ua.willkaxxx.demo.servlet_exhibition.controller.Servlet</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>ServletName</servlet-name>-->
+<!--        <url-pattern>/exhibitions/*</url-pattern>-->
+<!--    </servlet-mapping>-->
 
 <!--    <welcome-file-list>-->
 <!--        <welcome-file>index.jsp</welcome-file>-->

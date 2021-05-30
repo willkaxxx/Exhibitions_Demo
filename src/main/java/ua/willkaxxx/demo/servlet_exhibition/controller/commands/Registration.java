@@ -34,7 +34,7 @@ public class Registration implements Command {
             } catch (SQLException e) {
                 if(e.getSQLState().equals("23000")) {
                     request.setAttribute("exist_error", "User with this email is already exists");
-                    return "/user/registration.jsp";
+                    return "forward:/user/registration.jsp";
                 }
             }
 
@@ -42,6 +42,6 @@ public class Registration implements Command {
             return "redirect:/index.jsp";
         }
         log.info("User data incorrect");
-        return "/user/registration.jsp";
+        return "forward:/user/registration.jsp";
     }
 }

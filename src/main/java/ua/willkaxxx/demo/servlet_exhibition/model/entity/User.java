@@ -1,9 +1,10 @@
 package ua.willkaxxx.demo.servlet_exhibition.model.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
     private int id;
     private String email;
     private boolean expired;

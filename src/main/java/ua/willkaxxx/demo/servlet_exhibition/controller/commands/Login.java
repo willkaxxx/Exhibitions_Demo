@@ -33,9 +33,9 @@ public class Login implements Command{
                     return "redirect:/index.jsp";
                 }
             request.setAttribute("exist_error", "Email or password is incorrect");
-            return "/user/login.jsp";
+            return "forward:/user/login.jsp";
         }
         log.info("User data incorrect");
-        return "/user/login.jsp";
+        return "forward:/user/login.jsp";
     }
 }
