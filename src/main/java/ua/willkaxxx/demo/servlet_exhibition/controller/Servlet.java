@@ -2,6 +2,9 @@ package ua.willkaxxx.demo.servlet_exhibition.controller;
 
 import org.apache.log4j.Logger;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.*;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.ManageHalls;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.SaveHall;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.ShowEditHall;
 
 import java.io.*;
 import java.util.HashMap;
@@ -21,6 +24,9 @@ public class Servlet extends HttpServlet {
         commands.put("user/logout", new Logout());
         commands.put("login", new Login());
         commands.put("registration", new Registration());
+        commands.put("admin/manageHalls", new ManageHalls());
+        commands.put("admin/editHall", new ShowEditHall());
+        commands.put("admin/saveHall", new SaveHall());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -40,6 +46,7 @@ public class Servlet extends HttpServlet {
         if(!path.contains("redirect:") && !path.contains("forward:")){
             Command command = commands.getOrDefault(path,
                     (r) -> "redirect:/index.jsp");
+            log.info(command.getClass());
             path = command.execute(request);
         }
 

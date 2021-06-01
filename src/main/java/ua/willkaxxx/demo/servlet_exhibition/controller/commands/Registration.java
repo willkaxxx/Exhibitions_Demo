@@ -6,7 +6,6 @@ import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 
 public class Registration implements Command {

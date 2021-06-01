@@ -5,10 +5,13 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
+<header>
+    <a href="${pageContext.request.contextPath}exhibitions/redirect:/user/registration.jsp">registration</a><br/>
+    <a href="${pageContext.request.contextPath}exhibitions/redirect:/user/login.jsp">login</a><br/>
+</header>
 <h1><%= "Hello World!" %></h1>
-<a href="${pageContext.request.contextPath}exhibitions/redirect:/user/registration.jsp">registration</a><br/>
-<a href="${pageContext.request.contextPath}exhibitions/redirect:/user/login.jsp">login</a><br/>
 <a href="${pageContext.request.contextPath}exhibitions/user/logout">logout</a><br/>
+<a href="${pageContext.request.contextPath}exhibitions/redirect:/admin/adminHome.jsp">Admin home</a><br/>
 <br/>
 </body>
 </html>

@@ -48,4 +48,23 @@ public class Hall {
             return this.toString().equals(obj.toString());
         return false;
     }
+
+    public static class Builder{
+        private final Hall hall;
+
+        public Builder(){
+            hall = new Hall();
+        }
+        public Builder id(int id){
+            hall.id = id;
+            return this;
+        }
+        public Builder address(String address){
+            hall.address = address;
+            return this;
+        }
+        public Hall build(){
+            return hall;
+        }
+    }
 }
