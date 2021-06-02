@@ -21,5 +21,8 @@
             </tr>
         </c:forEach>
     </table>
+    <c:forEach begin="1" end="${totalPages}" var="i" step="1">
+        <a href="${pageContext.request.contextPath}/exhibitions/admin/manageHalls?page=${i}">${i}</a>
+    </c:forEach>
 </body>
 </html>

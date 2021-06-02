@@ -9,7 +9,7 @@ public class User implements Serializable {
     private String email;
     private boolean expired;
     private String password;
-    private Role role;
+    private Role role = Role.User;
 
     private List<Exhibition> exhibitions = new ArrayList<>();
 

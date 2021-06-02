@@ -10,8 +10,8 @@ public class ShowEditHall implements Command {
     HallService hallService = new HallService();
     @Override
     public String execute(HttpServletRequest request) {
-        int hallId = Integer.parseInt(request.getParameter("hallId"));
-        request.getServletContext().setAttribute("editHall", hallService.getHall(hallId).orElse(new Hall()));
+        request.getServletContext().setAttribute("editHall", hallService.getHall(
+                Integer.parseInt(request.getParameter("hallId"))).orElse(new Hall()));
         return "forward:/admin/editHall.jsp";
     }
 }

@@ -99,8 +99,6 @@ public class Exhibition {
                 ", end=" + end +
                 ", cost=" + cost +
                 ", canceled=" + canceled +
-//                ", users number=\n" + users +
-//                ", halls number=\n" + halls+
                 ", users number=" + users.size() +
                 ", halls number=" + halls.size() +
                 '}';

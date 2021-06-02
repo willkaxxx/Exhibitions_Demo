@@ -12,8 +12,7 @@ public class SaveHall implements Command {
     public String execute(HttpServletRequest request) {
         Hall hall = (Hall)request.getServletContext().getAttribute("editHall");
         hall.setAddress(new String(request.getParameter("address").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
-        HallService hallService = new HallService();
-        hallService.save(hall);
+        new HallService().save(hall);
         return "redirect:/admin/adminHome.jsp";
     }
 }

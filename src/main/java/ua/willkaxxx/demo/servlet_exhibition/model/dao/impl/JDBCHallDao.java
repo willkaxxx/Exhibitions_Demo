@@ -55,7 +55,7 @@ public class JDBCHallDao implements HallDao {
     }
 
     @Override
-    public Optional<Hall> findById(int id){
+    public Optional<Hall> findById(int id) {
         final String query = "select e.*, h.* from halls e " +
                 "left join exhibitions_halls eh on e.hall_id = eh.halls_id " +
                 "left join exhibitions h on eh.exhibitions_id = h.exhibition_id " +
@@ -100,7 +100,7 @@ public class JDBCHallDao implements HallDao {
                         .makeUnique(hallMap, hall);
                 Exhibition exhibition = exhibitionMapper
                         .extractFromResultSet(rs);
-                if(!hall.getExhibitions().contains(exhibition) && exhibition.getId() > 0){
+                if (!hall.getExhibitions().contains(exhibition) && exhibition.getId() > 0) {
                     hall.getExhibitions().add(exhibition);
                 }
             }
@@ -113,18 +113,52 @@ public class JDBCHallDao implements HallDao {
     }
 
     @Override
+    public List<Hall> findAllByPage(int page, int perPage) {
+        final String query = "select e.* from halls e limit ?,?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            List<Hall> halls = new ArrayList<>();
+            preparedStatement.setInt(1, (page - 1)*perPage);
+            preparedStatement.setInt(2, perPage);
+            ResultSet rs = preparedStatement.executeQuery();
+            HallMapper hallMapper = new HallMapper();
+            while (rs.next()) {
+                halls.add(hallMapper.extractFromResultSet(rs));
+            }
+            return halls;
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public int numberOfRows() {
+        String query = "select count(*) from halls;";
+        try (Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            return rs.getInt("count(*)");
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
     public void update(Hall entity) {
         final String query = "update halls set address = ? where hall_id = ?;";
         final String joinTableQuery = "insert ignore into exhibitions_halls values (?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-            PreparedStatement joinTableStatement = connection.prepareStatement(joinTableQuery)) {
+             PreparedStatement joinTableStatement = connection.prepareStatement(joinTableQuery)) {
             connection.setAutoCommit(false);
             preparedStatement.setString(1, entity.getAddress());
             preparedStatement.setInt(2, entity.getId());
             preparedStatement.execute();
 
             joinTableStatement.setInt(2, entity.getId());
-            for(Exhibition ex : entity.getExhibitions()){
+            for (Exhibition ex : entity.getExhibitions()) {
                 joinTableStatement.setInt(1, ex.getId());
                 joinTableStatement.execute();
             }

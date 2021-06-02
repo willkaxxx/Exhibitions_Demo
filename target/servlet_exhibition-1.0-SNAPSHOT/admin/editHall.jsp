@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Edit current hall</title>
 </head>
 <body>
     <form action="${pageContext.request.contextPath}/exhibitions/admin/saveHall" method="post">

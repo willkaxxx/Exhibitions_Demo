@@ -9,7 +9,8 @@ public class ManageHalls implements Command {
     HallService hallService = new HallService();
     @Override
     public String execute(HttpServletRequest request) {
-        request.setAttribute("halls", hallService.getAllHalls());
+        request.setAttribute("halls", hallService.getPage(Integer.parseInt(request.getParameter("page"))));
+        request.setAttribute("totalPages", hallService.getTotalPages());
         return "forward:/admin/manageHalls.jsp";
     }
 }
