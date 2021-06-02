@@ -36,30 +36,29 @@ public class Servlet extends HttpServlet {
         commands.put("admin/addHallToExhibition", new AddHallToExhibition());
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) {
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String path = request.getRequestURI();
         log.info("Raw path:" + path);
         path = path.replaceAll(".*/exhibitions/", "");
 
-        if(!path.contains("redirect:") && !path.contains("forward:")){
-            Command command = commands.getOrDefault(path,
-                    (r) -> "redirect:/index.jsp");
-            log.info(command.getClass());
-            path = command.execute(request);
+        if (!path.contains("redirect:") && !path.contains("forward:")) {
+            commands.getOrDefault(path,
+                    (req, res) -> res.sendRedirect("/index.jsp")).execute(request,response);
+            return;
         }
 
         if (path.contains("redirect:"))
             sendRedirect(response, path);
-        if(path.contains("forward:"))
+        if (path.contains("forward:"))
             forward(response, request, path);
     }
 

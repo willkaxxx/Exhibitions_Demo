@@ -5,14 +5,17 @@ import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.ExhibitionService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class DeleteHallFromExhibition implements Command {
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         new ExhibitionService().removeHall(
                 new Exhibition.Builder().id(Integer.parseInt(request.getParameter("Eid"))).build(),
                 new Hall.Builder().id(Integer.parseInt(request.getParameter("Hid"))).build());
-        return "redirect:/admin/adminHome.jsp";
+        response.sendRedirect("/exhibitions/admin/manageExhibitions?page=1");
     }
 }

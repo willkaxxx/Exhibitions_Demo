@@ -51,12 +51,14 @@ public class ExhibitionService {
 
     public boolean removeHall(Exhibition e, Hall h){
         try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
+            e.getHalls().remove(h);
             return exhibitionDao.deleteHallFromExhibition(e, h);
         }
     }
 
     public boolean addHall(Exhibition e, Hall h){
         try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
+            e.getHalls().add(h);
             return exhibitionDao.addHallToExhibition(e, h);
         }
     }

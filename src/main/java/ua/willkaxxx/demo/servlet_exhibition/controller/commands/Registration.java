@@ -5,7 +5,10 @@ import ua.willkaxxx.demo.servlet_exhibition.model.entity.Role;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.UserService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class Registration implements Command {
@@ -13,7 +16,7 @@ public class Registration implements Command {
     UserService userService = new UserService();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         User user = new User();
         boolean dataValid = true;
         if (request.getParameter("email").length() < 2) {
@@ -33,14 +36,14 @@ public class Registration implements Command {
             } catch (SQLException e) {
                 if(e.getSQLState().equals("23000")) {
                     request.setAttribute("exist_error", "User with this email is already exists");
-                    return "forward:/user/registration.jsp";
+                    request.getRequestDispatcher("/user/registration.jsp").forward(request,response);
                 }
             }
 
             log.info("New user registered: " + user);
-            return "redirect:/index.jsp";
+            response.sendRedirect("/index.jsp");
         }
         log.info("User data incorrect");
-        return "forward:/user/registration.jsp";
+        request.getRequestDispatcher("/user/registration.jsp").forward(request,response);
     }
 }
