@@ -50,7 +50,6 @@ public class JDBCHallDao implements HallDao {
                 log.error("Error while rollback");
                 throw new RuntimeException(ex);
             }
-            e.printStackTrace();
         }
     }
 
@@ -78,7 +77,6 @@ public class JDBCHallDao implements HallDao {
             return Optional.of(hall);
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
             return Optional.empty();
         }
     }
@@ -107,7 +105,6 @@ public class JDBCHallDao implements HallDao {
             return new ArrayList<>(hallMap.values());
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -127,7 +124,6 @@ public class JDBCHallDao implements HallDao {
             return halls;
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -141,7 +137,6 @@ public class JDBCHallDao implements HallDao {
             return rs.getInt("count(*)");
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
             return 0;
         }
     }
@@ -172,18 +167,16 @@ public class JDBCHallDao implements HallDao {
                 throw new RuntimeException(ex);
             }
             log.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
 
     @Override
     public void delete(int id) {
-        final String query = "delete from halls where hall_id = ?;\n";
+        final String query = "delete from halls where hall_id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
 

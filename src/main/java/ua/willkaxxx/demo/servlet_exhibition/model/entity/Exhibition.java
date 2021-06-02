@@ -2,6 +2,8 @@ package ua.willkaxxx.demo.servlet_exhibition.model.entity;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +11,8 @@ public class Exhibition {
     private int id;
     private String name;
     private String subject;
-    private Timestamp beginning;
-    private Timestamp end;
+    private Timestamp beginning = Timestamp.valueOf(LocalDateTime.now());
+    private Timestamp end = Timestamp.valueOf(LocalDateTime.now());
     private BigDecimal cost;
     private boolean canceled;
 
@@ -48,6 +50,9 @@ public class Exhibition {
     public void setBeginning(Timestamp beginning) {
         this.beginning = beginning;
     }
+    public void setBeginning(String beginning) {
+        this.beginning = Timestamp.valueOf(LocalDateTime.parse(beginning, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+    }
 
     public Timestamp getEnd() {
         return end;
@@ -55,6 +60,9 @@ public class Exhibition {
 
     public void setEnd(Timestamp end) {
         this.end = end;
+    }
+    public void setEnd(String end) {
+        this.end = Timestamp.valueOf(LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
     }
 
     public BigDecimal getCost() {
@@ -89,6 +97,18 @@ public class Exhibition {
         this.halls = halls;
     }
 
+    public String getFormattedBeginning(){
+        return dateFormat(beginning);
+    }
+    public String getFormattedEnd(){
+        return dateFormat(end);
+    }
+
+    private String dateFormat(Timestamp date){
+        return date.toLocalDateTime().
+                format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+    }
+
     @Override
     public String toString() {
         return "Exhibition{" +
@@ -109,5 +129,48 @@ public class Exhibition {
         if(obj instanceof Exhibition)
             return this.toString().equals(obj.toString());
         return false;
+    }
+
+    public static class Builder{
+        private final Exhibition exhibition;
+
+        public Builder(){
+            exhibition = new Exhibition();
+        }
+        public Builder id(int id){
+            exhibition.id = id;
+            return this;
+        }
+        public Builder name(String name){
+            exhibition.name = name;
+            return this;
+        }
+        public Builder subject(String subject){
+            exhibition.subject = subject;
+            return this;
+        }
+        public Builder cost(BigDecimal cost){
+            exhibition.cost = cost;
+            return this;
+        }
+        public Builder beginning(Timestamp beginning){
+            exhibition.beginning = beginning;
+            return this;
+        }
+        public Builder beginning(String beginning){
+            exhibition.setName(beginning);
+            return this;
+        }
+        public Builder end(Timestamp end){
+            exhibition.end = end;
+            return this;
+        }
+        public Builder end(String end){
+            exhibition.setEnd(end);
+            return this;
+        }
+        public Exhibition build(){
+            return exhibition;
+        }
     }
 }

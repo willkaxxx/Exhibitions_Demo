@@ -24,5 +24,6 @@
     <c:forEach begin="1" end="${totalPages}" var="i" step="1">
         <a href="${pageContext.request.contextPath}/exhibitions/admin/manageHalls?page=${i}">${i}</a>
     </c:forEach>
+    <p><a href="${pageContext.request.contextPath}/exhibitions/admin/editHall?hallId=0">Create</a></p>
 </body>
 </html>

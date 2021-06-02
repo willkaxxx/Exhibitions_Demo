@@ -1,4 +1,4 @@
-package ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin;
+package ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls;
 
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.HallService;

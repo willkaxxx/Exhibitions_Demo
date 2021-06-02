@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class UserMapper implements ObjectMapper<User>{
+public class UserMapper implements ObjectMapper<User> {
     @Override
     public User extractFromResultSet(ResultSet rs) throws SQLException {
         User user = new User();
@@ -21,7 +21,8 @@ public class UserMapper implements ObjectMapper<User>{
 
     @Override
     public User makeUnique(Map<Integer, User> cache, User object) {
-        cache.putIfAbsent(object.getId(), object);
+        if (object.getId() > 0)
+            cache.putIfAbsent(object.getId(), object);
         return cache.get(object.getId());
     }
 }

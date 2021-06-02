@@ -1,4 +1,4 @@
-package ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin;
+package ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls;
 
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
@@ -10,7 +10,7 @@ public class ShowEditHall implements Command {
     HallService hallService = new HallService();
     @Override
     public String execute(HttpServletRequest request) {
-        request.getServletContext().setAttribute("editHall", hallService.getHall(
+        request.getSession().setAttribute("editHall", hallService.getHall(
                 Integer.parseInt(request.getParameter("hallId"))).orElse(new Hall()));
         return "forward:/admin/editHall.jsp";
     }

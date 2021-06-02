@@ -14,8 +14,9 @@
 <body>
     <form action="${pageContext.request.contextPath}/exhibitions/admin/saveHall" method="post">
         <p>New address</p>
-        <input name="address" value="${editHall.address}" pattern="[A-Za-zА-Яа-яЁё0-9]{5,}">
-        <button type="submit">Save</button>
+        <input name="address" value="${editHall.address}">
+        <c:if test="${editHall.id < 1}"><button type="submit">Create</button></c:if>
+        <c:if test="${editHall.id >= 1}"><button type="submit">Save</button></c:if>
     </form>
 </body>
 </html>

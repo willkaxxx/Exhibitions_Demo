@@ -12,6 +12,6 @@
 </head>
 <body>
 <a href="${pageContext.request.contextPath}/exhibitions/admin/manageHalls?page=1">Manage halls</a><br/>
-<a href="${pageContext.request.contextPath}/admin/manageExhibitions">Manage exhibitions</a><br/>
+<a href="${pageContext.request.contextPath}/exhibitions/admin/manageExhibitions?page=1">Manage exhibitions</a><br/>
 </body>
 </html>

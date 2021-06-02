@@ -2,9 +2,10 @@ package ua.willkaxxx.demo.servlet_exhibition.controller;
 
 import org.apache.log4j.Logger;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.*;
-import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.ManageHalls;
-import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.SaveHall;
-import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.ShowEditHall;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.exhibitions.*;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.ManageHalls;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.SaveHall;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.ShowEditHall;
 
 import java.io.*;
 import java.util.HashMap;
@@ -24,9 +25,15 @@ public class Servlet extends HttpServlet {
         commands.put("user/logout", new Logout());
         commands.put("login", new Login());
         commands.put("registration", new Registration());
+
         commands.put("admin/manageHalls", new ManageHalls());
         commands.put("admin/editHall", new ShowEditHall());
         commands.put("admin/saveHall", new SaveHall());
+        commands.put("admin/manageExhibitions", new ManageExhibitions());
+        commands.put("admin/editExhibition", new ShowEditExhibition());
+        commands.put("admin/saveExhibition", new SaveExhibition());
+        commands.put("admin/deleteHallFromExhibition", new DeleteHallFromExhibition());
+        commands.put("admin/addHallToExhibition", new AddHallToExhibition());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) {

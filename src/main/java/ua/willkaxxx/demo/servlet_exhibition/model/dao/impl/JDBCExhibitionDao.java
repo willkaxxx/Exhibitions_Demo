@@ -21,7 +21,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
 
     @Override
     public void create(Exhibition entity) {
-        final String createQuery = "insert into exhibitions (beginning, canseled, cost, end, exhibition_name, subject) values (?,?,?,?,?,?);";
+        final String createQuery = "insert into exhibitions (beginning, canceled, cost, end, exhibition_name, subject) values (?,?,?,?,?,?);";
         final String joinHallQuery = "insert ignore into exhibitions_users values (?, ?);";
         final String joinUserQuery = "insert ignore into exhibitions_users values (?, ?);";
         final String findId = "SELECT LAST_INSERT_ID();";
@@ -104,6 +104,30 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         }
     }
 
+    public boolean addHallToExhibition(Exhibition exhibition, Hall hall){
+        final String query = "insert ignore into exhibitions_halls values (?, ?);";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setInt(2, exhibition.getId());
+            preparedStatement.setInt(1, hall.getId());
+            return preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteHallFromExhibition(Exhibition exhibition, Hall hall){
+        final String query = "delete from exhibitions_halls where (halls_id = ? and exhibitions_id = ?);";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setInt(1, hall.getId());
+            preparedStatement.setInt(2, exhibition.getId());
+            return preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public List<Exhibition> findAll() {
         final String query = "select e.*, h.*, u.* from exhibitions e " +
@@ -142,7 +166,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
 
     @Override
     public void update(Exhibition entity) {
-        final String query = "update exhibitions set beginning = ? , canseled = ?, cost = ?, end = ?, exhibition_name = ?, subject = ?;";
+        final String query = "update exhibitions set beginning = ? , canceled = ?, cost = ?, end = ?, exhibition_name = ?, subject = ? where exhibition_id = ?;";
         final String joinHallQuery = "insert ignore into exhibitions_halls values (?, ?);";
         final String joinUserQuery = "insert ignore into exhibitions_users values (?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -151,10 +175,11 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             connection.setAutoCommit(false);
             preparedStatement.setTimestamp(1, entity.getBeginning());
             preparedStatement.setBoolean(2, entity.isCanceled());
-            preparedStatement.setBigDecimal(2, entity.getCost());
-            preparedStatement.setTimestamp(2, entity.getEnd());
-            preparedStatement.setString(2, entity.getName());
-            preparedStatement.setString(2, entity.getSubject());
+            preparedStatement.setBigDecimal(3, entity.getCost());
+            preparedStatement.setTimestamp(4, entity.getEnd());
+            preparedStatement.setString(5, entity.getName());
+            preparedStatement.setString(6, entity.getSubject());
+            preparedStatement.setInt(7, entity.getId());
             preparedStatement.execute();
 
             joinHallStatement.setInt(1, entity.getId());
@@ -198,6 +223,38 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Exhibition> findAllByPage(int page, int perPage) {
+        final String query = "select e.* from exhibitions e limit ?,?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            List<Exhibition> exhibitions = new ArrayList<>();
+            preparedStatement.setInt(1, (page - 1)*perPage);
+            preparedStatement.setInt(2, perPage);
+            ResultSet rs = preparedStatement.executeQuery();
+                ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
+            while (rs.next()) {
+                exhibitions.add(exhibitionMapper.extractFromResultSet(rs));
+            }
+            return exhibitions;
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public int numberOfRows() {
+        String query = "select count(*) from exhibitions;";
+        try (Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            return rs.getInt("count(*)");
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            return 0;
         }
     }
 }

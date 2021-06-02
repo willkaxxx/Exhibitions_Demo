@@ -9,18 +9,18 @@ import java.util.Map;
 public class HallMapper implements ObjectMapper<Hall> {
     @Override
     public Hall extractFromResultSet(ResultSet rs) throws SQLException {
-        if(!rs.isAfterLast()){
-            Hall hall = new Hall();
-            hall.setId(rs.getInt("hall_id"));
-            hall.setAddress(rs.getString("address"));
-            return hall;
+        if (!rs.isAfterLast()) {
+            return new Hall.Builder().
+                    id(rs.getInt("hall_id")).
+                    address(rs.getString("address")).build();
         }
         return null;
     }
 
     @Override
     public Hall makeUnique(Map<Integer, Hall> cache, Hall object) {
-        cache.putIfAbsent(object.getId(), object);
+        if (object.getId() > 0)
+            cache.putIfAbsent(object.getId(), object);
         return cache.get(object.getId());
     }
 }
