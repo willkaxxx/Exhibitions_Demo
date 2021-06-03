@@ -11,9 +11,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-public class Login implements Command{
+public class Login implements Command {
     private final Logger log = Logger.getLogger(Login.class);
     UserService userService = new UserService();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         boolean dataValid = true;
@@ -27,18 +28,20 @@ public class Login implements Command{
         }
         if (dataValid) {
             Optional<User> user = userService.findUser(request.getParameter("email"));
-            if(user.isPresent())
-                if(user.get().getPassword()
-                        .equals(request.getParameter("pass"))){//Todo add password encryption
+            if (user.isPresent())
+                if (user.get().getPassword()
+                        .equals(request.getParameter("pass"))) {//Todo add password encryption
                     HttpSession httpSession = request.getSession();
                     httpSession.setAttribute("user", user);
                     log.info("User : " + user.get() + " logged in");
                     response.sendRedirect("/index.jsp");
+                    return;
                 }
             request.setAttribute("exist_error", "Email or password is incorrect");
-                request.getRequestDispatcher("/user/login.jsp").forward(request,response);
+            request.getRequestDispatcher("/user/login.jsp").forward(request, response);
+            return;
         }
         log.info("User data incorrect");
-        request.getRequestDispatcher("/user/login.jsp").forward(request,response);
+        request.getRequestDispatcher("/user/login.jsp").forward(request, response);
     }
 }

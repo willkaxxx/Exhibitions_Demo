@@ -12,6 +12,7 @@
     <title>Halls:</title>
 </head>
 <body>
+<jsp:include page="../header.jsp"></jsp:include>
 <table border="1">
     <c:forEach items="${exhibitions}" var="product">
         <tr>

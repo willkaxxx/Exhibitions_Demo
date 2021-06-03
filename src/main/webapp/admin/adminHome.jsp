@@ -11,6 +11,7 @@
     <title>Hello, administrator</title>
 </head>
 <body>
+<jsp:include page="../header.jsp"></jsp:include>
 <a href="${pageContext.request.contextPath}/exhibitions/admin/manageHalls?page=1">Manage halls</a><br/>
 <a href="${pageContext.request.contextPath}/exhibitions/admin/manageExhibitions?page=1">Manage exhibitions</a><br/>
 </body>

@@ -61,6 +61,10 @@ public class User implements Serializable {
         this.exhibitions = exhibitions;
     }
 
+    public String getAuthority(){
+        return role.name();
+    }
+
     @Override
     public String toString() {
         return "User{" +

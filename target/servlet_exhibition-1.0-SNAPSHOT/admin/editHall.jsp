@@ -12,6 +12,7 @@
     <title>Edit current hall</title>
 </head>
 <body>
+<jsp:include page="../header.jsp"></jsp:include>
     <form action="${pageContext.request.contextPath}/exhibitions/admin/saveHall" method="post">
         <p>New address</p>
         <input name="address" value="${editHall.address}">

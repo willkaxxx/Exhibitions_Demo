@@ -18,6 +18,6 @@ public class SaveHall implements Command {
         Hall hall = (Hall)session.getAttribute("editHall");
         hall.setAddress(new String(request.getParameter("address").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         new HallService().save(hall);
-        response.sendRedirect("/admin/adminHome.jsp");
+        response.sendRedirect("/exhibitions/admin/manageHalls?page=1");
     }
 }

@@ -13,9 +13,9 @@ import java.io.IOException;
 public class AddHallToExhibition implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println(new ExhibitionService().addHall(
+        new ExhibitionService().addHall(
                 new Exhibition.Builder().id(Integer.parseInt(request.getParameter("Eid"))).build(),
-                new Hall.Builder().id(Integer.parseInt(request.getParameter("hallToAdd"))).build()));
+                new Hall.Builder().id(Integer.parseInt(request.getParameter("hallToAdd"))).build());
         response.sendRedirect("/exhibitions/admin/manageExhibitions?page=1");
     }
 }

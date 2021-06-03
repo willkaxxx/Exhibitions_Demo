@@ -12,6 +12,7 @@
     <title>Edit current exhibition</title>
 </head>
 <body>
+<jsp:include page="../header.jsp"></jsp:include>
 <form action="${pageContext.request.contextPath}/exhibitions/admin/saveExhibition" method="post">
     <input name="name" value="${editExhibition.name}" type="text"><br>
     <input name="subject" value="${editExhibition.subject}" type="text"><br>

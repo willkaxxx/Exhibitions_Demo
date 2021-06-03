@@ -31,19 +31,20 @@ public class Registration implements Command {
             user.setEmail(request.getParameter("email"));
             user.setPassword(request.getParameter("pass"));
             user.setRole(Role.Authorized);
-            try{
+            try {
                 userService.createUser(user);
             } catch (SQLException e) {
-                if(e.getSQLState().equals("23000")) {
+                if (e.getSQLState().equals("23000")) {
                     request.setAttribute("exist_error", "User with this email is already exists");
-                    request.getRequestDispatcher("/user/registration.jsp").forward(request,response);
+                    request.getRequestDispatcher("/user/registration.jsp").forward(request, response);
+                    return;
                 }
             }
-
             log.info("New user registered: " + user);
             response.sendRedirect("/index.jsp");
+            return;
         }
         log.info("User data incorrect");
-        request.getRequestDispatcher("/user/registration.jsp").forward(request,response);
+        request.getRequestDispatcher("/user/registration.jsp").forward(request, response);
     }
 }

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Optional;
 
-//@WebFilter(filterName = "adminFilter", urlPatterns = {"/exhibitions/admin/*", "/admin/*"} )
+@WebFilter(filterName = "adminFilter", urlPatterns = {"/exhibitions/admin/*", "/admin/*"} )
 public class AdminFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
