@@ -209,8 +209,13 @@ public class JDBCExhibitionDao implements ExhibitionDao {
     @Override
     public void delete(int id) {
         final String query = "delete from exhibitions where exhibition_id = ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        final String clearHallsQuery = "delete from exhibitions_halls where exhibitions_id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             PreparedStatement clearHallsStatement = connection.prepareStatement(clearHallsQuery)) {
             preparedStatement.setInt(1, id);
+            clearHallsStatement.setInt(1, id);
+            clearHallsStatement.execute();
+            preparedStatement.execute();
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
             e.printStackTrace();
@@ -227,18 +232,38 @@ public class JDBCExhibitionDao implements ExhibitionDao {
     }
 
     @Override
-    public List<Exhibition> findAllByPage(int page, int perPage) {
-        final String query = "select e.* from exhibitions e limit ?,?;";
+    public List<Exhibition> findAllByPage(int page, int perPage, String orderBy, String dir) {
+        final String query = "select e.*, h.*, u.* from (select * from exhibitions order by ? ? limit ?,?) e " +
+                "left join exhibitions_halls eh on e.exhibition_id = eh.exhibitions_id " +
+                "left join halls h on eh.halls_id = h.hall_id " +
+                "left join exhibitions_users eu on e.exhibition_id = eu.exhibitions_id " +
+                "left join users u on eu.users_id = u.user_id;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            List<Exhibition> exhibitions = new ArrayList<>();
-            preparedStatement.setInt(1, (page - 1)*perPage);
-            preparedStatement.setInt(2, perPage);
+            preparedStatement.setString(1, orderBy);
+            preparedStatement.setString(2, dir);
+            preparedStatement.setInt(3, (page - 1)*perPage);
+            preparedStatement.setInt(4, perPage);
+            Map<Integer, Exhibition> exhibitionMap = new HashMap<>();
             ResultSet rs = preparedStatement.executeQuery();
-                ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
+            HallMapper hallMapper = new HallMapper();
+            UserMapper userMapper = new UserMapper();
+            ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
             while (rs.next()) {
-                exhibitions.add(exhibitionMapper.extractFromResultSet(rs));
+                Hall hall = hallMapper
+                        .extractFromResultSet(rs);
+                Exhibition exhibition = exhibitionMapper
+                        .extractFromResultSet(rs);
+                User user = userMapper
+                        .extractFromResultSet(rs);
+                exhibition = exhibitionMapper.makeUnique(exhibitionMap, exhibition);
+                if(!exhibition.getUsers().contains(user) && user.getId() > 0){
+                    exhibition.getUsers().add(user);
+                }
+                if(!exhibition.getHalls().contains(hall) && hall.getId() > 0){
+                    exhibition.getHalls().add(hall);
+                }
             }
-            return exhibitions;
+            return new ArrayList<>(exhibitionMap.values());
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
             return new ArrayList<>();

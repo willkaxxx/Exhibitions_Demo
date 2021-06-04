@@ -86,6 +86,19 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
+    public boolean enroll(Exhibition exhibition, User user) {
+        final String query = "insert ignore into exhibitions_users values (?, ?);";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setInt(1, exhibition.getId());
+            preparedStatement.setInt(2, user.getId());
+            return preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
     public Optional<User> findByEmail(String email){
         final String query = "select u.*, e.* from users u " +
                 "left join exhibitions_users eu on u.user_id = eu.users_id " +

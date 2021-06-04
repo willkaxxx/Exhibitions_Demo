@@ -6,6 +6,11 @@ import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.exhibition
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.ManageHalls;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.SaveHall;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.ShowEditHall;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.auth.EnrollToExhibition;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.Login;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.auth.Logout;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.Registration;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.ShowHome;
 
 import java.io.*;
 import java.util.HashMap;
@@ -34,6 +39,10 @@ public class Servlet extends HttpServlet {
         commands.put("admin/saveExhibition", new SaveExhibition());
         commands.put("admin/deleteHallFromExhibition", new DeleteHallFromExhibition());
         commands.put("admin/addHallToExhibition", new AddHallToExhibition());
+        commands.put("admin/deleteExhibition", new DeleteExhibition());
+
+        commands.put("index", new ShowHome());
+        commands.put("auth/enroll", new EnrollToExhibition());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,12 +56,12 @@ public class Servlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        log.info("Raw path:" + path);
+        log.trace("Processing: " + path);
         path = path.replaceAll(".*/exhibitions/", "");
 
         if (!path.contains("redirect:") && !path.contains("forward:")) {
             commands.getOrDefault(path,
-                    (req, res) -> res.sendRedirect("/index.jsp")).execute(request,response);
+                    commands.get("index")).execute(request,response);
             return;
         }
 

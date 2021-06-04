@@ -28,14 +28,18 @@ public class ExhibitionService {
                 exhibitionDao.update(exhibition);
             }
             return exhibition;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             return exhibition;
         }
     }
     public List<Exhibition> getPage(int page){
+        return getPage(page, "1", "asc");
+    }
+
+    public List<Exhibition> getPage(int page, String orderBy, String dir){
         try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
-            return exhibitionDao.findAllByPage(page, EXHIBITIONS_PER_PAGE);
+            return exhibitionDao.findAllByPage(page, EXHIBITIONS_PER_PAGE, orderBy, dir);
         }
     }
 
@@ -60,6 +64,12 @@ public class ExhibitionService {
         try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
             e.getHalls().add(h);
             return exhibitionDao.addHallToExhibition(e, h);
+        }
+    }
+
+    public void delete(int exhibitionId){
+        try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
+            exhibitionDao.delete(exhibitionId);
         }
     }
 }

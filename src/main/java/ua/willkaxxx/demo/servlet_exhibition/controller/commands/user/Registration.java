@@ -1,6 +1,7 @@
-package ua.willkaxxx.demo.servlet_exhibition.controller.commands;
+package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
 import org.apache.log4j.Logger;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Role;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.UserService;
@@ -41,7 +42,7 @@ public class Registration implements Command {
                 }
             }
             log.info("New user registered: " + user);
-            response.sendRedirect("/index.jsp");
+            response.sendRedirect("/exhibitions/index");
             return;
         }
         log.info("User data incorrect");

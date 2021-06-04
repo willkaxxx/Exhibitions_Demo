@@ -6,10 +6,11 @@ import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(filterName = "authorizedFilter", urlPatterns = "/exhibitions/user/*")
+@WebFilter(filterName = "authorizedFilter", urlPatterns = "/exhibitions/auth/*")
 public class AuthorizedFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -23,6 +24,6 @@ public class AuthorizedFilter implements Filter {
             }
         }
 
-        servletRequest.getRequestDispatcher("/exhibitions/index.jsp").forward(servletRequest, servletResponse);
+        ((HttpServletResponse) servletResponse).sendRedirect("/exhibitions/index");
     }
 }

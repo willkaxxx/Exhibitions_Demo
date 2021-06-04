@@ -1,6 +1,7 @@
-package ua.willkaxxx.demo.servlet_exhibition.controller.commands;
+package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
 import org.apache.log4j.Logger;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.UserService;
 
@@ -34,7 +35,7 @@ public class Login implements Command {
                     HttpSession httpSession = request.getSession();
                     httpSession.setAttribute("user", user);
                     log.info("User : " + user.get() + " logged in");
-                    response.sendRedirect("/index.jsp");
+                    response.sendRedirect("/exhibitions/index");
                     return;
                 }
             request.setAttribute("exist_error", "Email or password is incorrect");

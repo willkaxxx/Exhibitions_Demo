@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddHallToExhibition implements Command {
-    @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         new ExhibitionService().addHall(
                 new Exhibition.Builder().id(Integer.parseInt(request.getParameter("Eid"))).build(),
                 new Hall.Builder().id(Integer.parseInt(request.getParameter("hallToAdd"))).build());
-        response.sendRedirect("/exhibitions/admin/manageExhibitions?page=1");
+        response.sendRedirect("/exhibitions/admin/editExhibition?exhibitionId=" +
+                ((Exhibition)request.getSession().getAttribute("editExhibition")).getId());
     }
 }

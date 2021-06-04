@@ -6,6 +6,7 @@ import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -22,7 +23,6 @@ public class AdminFilter implements Filter {
                 return;
             }
         }
-
-        servletRequest.getRequestDispatcher("/exhibitions/index.jsp").forward(servletRequest, servletResponse);
+        ((HttpServletResponse) servletResponse).sendRedirect("/exhibitions/index");
     }
 }

@@ -14,6 +14,14 @@
 <body>
 <jsp:include page="../header.jsp"></jsp:include>
 <table border="1">
+    <tr>
+        <td>ID</td>
+        <td>Cost</td>
+        <td>Name</td>
+        <td>Subject</td>
+        <td>Beginning</td>
+        <td>End</td>
+    </tr>
     <c:forEach items="${exhibitions}" var="product">
         <tr>
             <td><c:out value="${product.id}" /></td>

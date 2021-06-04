@@ -13,17 +13,32 @@
 </head>
 <body>
 <jsp:include page="../header.jsp"></jsp:include>
-<form action="${pageContext.request.contextPath}/exhibitions/admin/saveExhibition" method="post">
-    <input name="name" value="${editExhibition.name}" type="text"><br>
-    <input name="subject" value="${editExhibition.subject}" type="text"><br>
-    <input name="cost" value="${editExhibition.cost}" type="number"><br>
-    <input name="beginning" value="${editExhibition.getFormattedBeginning()}" type="datetime-local"><br>
-    <input name="end" value="${editExhibition.getFormattedEnd()}" type="datetime-local"><br>
-    <p>
-        <c:if test="${editExhibition.id < 1}"><button type="submit">Create</button></c:if>
-        <c:if test="${editExhibition.id >= 1}"><button type="submit">Save</button></c:if>
-    </p>
+<form action="${pageContext.request.contextPath}/exhibitions/admin/saveExhibition" id="act" method="post">
+    <label>Name:
+        <input name="name" value="${editExhibition.name}" type="text">
+    </label><br>
+    <label>Subject:
+        <input name="subject" value="${editExhibition.subject}" type="text">
+    </label><br>
+    <label>Cost:
+        <input name="cost" value="${editExhibition.cost}" type="number">
+    </label><br>
+    <label>Beginning:
+        <input name="beginning" value="${editExhibition.getFormattedBeginning()}" type="datetime-local">
+    </label><br>
+    <label>End:
+        <input name="end" value="${editExhibition.getFormattedEnd()}" type="datetime-local">
+    </label><br>
 </form>
+<p>
+    <c:if test="${editExhibition.id < 1}">
+        <button type="submit" form="act">Create</button>
+    </c:if>
+    <c:if test="${editExhibition.id >= 1}">
+        <button type="submit" form="act">Save</button>
+        <button type="submit" form="act" formaction="${pageContext.request.contextPath}/exhibitions/admin/deleteExhibition">Delete</button>
+    </c:if>
+</p>
 <c:if test="${editExhibition.halls.size() > 0}">
 <table border="1">
     <c:forEach items="${editExhibition.halls}" var="product">
@@ -35,14 +50,16 @@
     </c:forEach>
 </c:if>
 </table>
-<form action="/exhibitions/admin/addHallToExhibition?Hid=${hallToAdd}&Eid=${editExhibition.id}" method="post">
-    <select name="hallToAdd">
-        <c:forEach items="${allHalls}" var="item">
-            <option value="${item.id}">${item.address}</option>
-        </c:forEach>
-    </select>
-    <button type="submit">Add</button>
-    <a href="/exhibitions/admin/addHallToExhibition?Eid=${editExhibition.id}"></a>
-</form>
+<c:if test="${editExhibition.id > 0}">
+    <form action="/exhibitions/admin/addHallToExhibition?Hid=${hallToAdd}&Eid=${editExhibition.id}" method="post">
+        <select name="hallToAdd">
+            <c:forEach items="${allHalls}" var="item">
+                <option value="${item.id}">${item.address}</option>
+            </c:forEach>
+        </select>
+        <button type="submit">Add</button>
+        <a href="/exhibitions/admin/addHallToExhibition?Eid=${editExhibition.id}"></a>
+    </form>
+</c:if>
 </body>
 </html>

@@ -2,6 +2,7 @@ package ua.willkaxxx.demo.servlet_exhibition.model.services;
 
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.UserDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
+import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
 
 import java.sql.SQLException;
@@ -18,6 +19,12 @@ public class UserService {
     public Optional<User> findUser(String email){
         try(UserDao userDao = JDBCDaoFactory.getInstance().createUserDao()){
             return userDao.findByEmail(email);
+        }
+    }
+
+    public boolean enroll(Exhibition exhibition, User user){
+        try(UserDao userDao = JDBCDaoFactory.getInstance().createUserDao()){
+            return userDao.enroll(exhibition, user);
         }
     }
 }
