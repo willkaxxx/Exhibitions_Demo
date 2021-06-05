@@ -7,6 +7,7 @@ import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.Mana
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.SaveHall;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls.ShowEditHall;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.auth.EnrollToExhibition;
+import ua.willkaxxx.demo.servlet_exhibition.controller.commands.auth.UserHome;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.Login;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.auth.Logout;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.Registration;
@@ -43,6 +44,7 @@ public class Servlet extends HttpServlet {
 
         commands.put("index", new ShowHome());
         commands.put("auth/enroll", new EnrollToExhibition());
+        commands.put("auth/userHome", new UserHome());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

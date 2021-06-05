@@ -4,6 +4,7 @@ import ua.willkaxxx.demo.servlet_exhibition.model.dao.ExhibitionDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
+import ua.willkaxxx.demo.servlet_exhibition.model.entity.OrderDir;
 
 
 import java.sql.SQLException;
@@ -34,10 +35,10 @@ public class ExhibitionService {
         }
     }
     public List<Exhibition> getPage(int page){
-        return getPage(page, "1", "asc");
+        return getPage(page, "1", OrderDir.asc);
     }
 
-    public List<Exhibition> getPage(int page, String orderBy, String dir){
+    public List<Exhibition> getPage(int page, String orderBy, OrderDir dir){
         try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
             return exhibitionDao.findAllByPage(page, EXHIBITIONS_PER_PAGE, orderBy, dir);
         }

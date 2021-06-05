@@ -19,6 +19,6 @@ public class EnrollToExhibition implements Command {
                 new Exhibition.Builder().id(Integer.parseInt(
                         request.getParameter("exhibitionId"))).build(),
                 curUser);
-        response.sendRedirect("/exhibitions/index");
+        response.sendRedirect("/exhibitions/auth/userHome");
     }
 }

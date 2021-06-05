@@ -50,8 +50,9 @@ public class Exhibition {
     public void setBeginning(Timestamp beginning) {
         this.beginning = beginning;
     }
+
     public void setBeginning(String beginning) {
-        this.beginning = Timestamp.valueOf(LocalDateTime.parse(beginning, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        this.beginning = Timestamp.valueOf(beginning + " 00:00:00");
     }
 
     public Timestamp getEnd() {
@@ -61,8 +62,9 @@ public class Exhibition {
     public void setEnd(Timestamp end) {
         this.end = end;
     }
+
     public void setEnd(String end) {
-        this.end = Timestamp.valueOf(LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        this.end = Timestamp.valueOf(end + " 00:00:00");
     }
 
     public BigDecimal getCost() {
@@ -97,16 +99,17 @@ public class Exhibition {
         this.halls = halls;
     }
 
-    public String getFormattedBeginning(){
+    public String getFormattedBeginning() {
         return dateFormat(beginning);
     }
-    public String getFormattedEnd(){
+
+    public String getFormattedEnd() {
         return dateFormat(end);
     }
 
-    private String dateFormat(Timestamp date){
+    private String dateFormat(Timestamp date) {
         return date.toLocalDateTime().
-                format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+                format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     @Override
@@ -126,50 +129,59 @@ public class Exhibition {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Exhibition)
+        if (obj instanceof Exhibition)
             return this.toString().equals(obj.toString());
         return false;
     }
 
-    public static class Builder{
+    public static class Builder {
         private final Exhibition exhibition;
 
-        public Builder(){
+        public Builder() {
             exhibition = new Exhibition();
         }
-        public Builder id(int id){
+
+        public Builder id(int id) {
             exhibition.id = id;
             return this;
         }
-        public Builder name(String name){
+
+        public Builder name(String name) {
             exhibition.name = name;
             return this;
         }
-        public Builder subject(String subject){
+
+        public Builder subject(String subject) {
             exhibition.subject = subject;
             return this;
         }
-        public Builder cost(BigDecimal cost){
+
+        public Builder cost(BigDecimal cost) {
             exhibition.cost = cost;
             return this;
         }
-        public Builder beginning(Timestamp beginning){
+
+        public Builder beginning(Timestamp beginning) {
             exhibition.beginning = beginning;
             return this;
         }
-        public Builder beginning(String beginning){
+
+        public Builder beginning(String beginning) {
             exhibition.setName(beginning);
             return this;
         }
-        public Builder end(Timestamp end){
+
+        public Builder end(Timestamp end) {
             exhibition.end = end;
             return this;
         }
-        public Builder end(String end){
+
+        public Builder end(String end) {
             exhibition.setEnd(end);
             return this;
         }
-        public Exhibition build(){
+
+        public Exhibition build() {
             return exhibition;
         }
     }

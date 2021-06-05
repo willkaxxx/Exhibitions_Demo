@@ -7,16 +7,20 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Registration</title>
+    <fmt:setLocale value="${lang}"/>
+    <fmt:setBundle basename="local"/>
+    <title><fmt:message key="registration.title"/></title>
 </head>
 <body>
     <form action="${pageContext.request.contextPath}/exhibitions/registration" method="post">
-        <p>Email <input type="email" name="email"> ${reg_email_error}</p>
-        <p>Password<input type="text" name="pass"> ${reg_pass_error}</p>
+        <p><fmt:message key="registration.email"/> <input type="email" name="email"> ${reg_email_error}</p>
+        <p><fmt:message key="registration.pass"/><input type="text" name="pass"> ${reg_pass_error}</p>
         <p>${exist_error}</p>
-        <p><button type="submit">Register</button></p>
+        <p><button type="submit"><fmt:message key="registration.action"/></button></p>
     </form>
 </body>
 </html>

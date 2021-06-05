@@ -99,6 +99,27 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
+    public List<Exhibition> findExhibitionsByUser(User u) {
+        String query = "select e.* from exhibitions_users eu\n" +
+                "left join exhibitions e on eu.exhibitions_id = e.exhibition_id\n" +
+                "where eu.users_id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            List<Exhibition> exhibitions = new ArrayList<>();
+            preparedStatement.setInt(1, u.getId());
+            ResultSet rs = preparedStatement.executeQuery();
+            ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
+            while (rs.next()) {
+                exhibitions.add(exhibitionMapper.extractFromResultSet(rs));
+            }
+            log.info(exhibitions);
+            return exhibitions;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
     public Optional<User> findByEmail(String email){
         final String query = "select u.*, e.* from users u " +
                 "left join exhibitions_users eu on u.user_id = eu.users_id " +
@@ -118,6 +139,8 @@ public class JDBCUserDao implements UserDao {
                 Exhibition exhibition = exhibitionMapper.extractFromResultSet(rs);
                 exhibitionMapper.makeUnique(exhibitionMap, exhibition);
             }
+            if(user.getId()==0)
+                return Optional.empty();
             user.setExhibitions(new ArrayList<>(exhibitionMap.values()));
             return Optional.of(user);
         } catch (SQLException e) {

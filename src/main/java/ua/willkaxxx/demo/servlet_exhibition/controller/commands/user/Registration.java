@@ -40,6 +40,7 @@ public class Registration implements Command {
                     request.getRequestDispatcher("/user/registration.jsp").forward(request, response);
                     return;
                 }
+                log.error(e.getMessage());
             }
             log.info("New user registered: " + user);
             response.sendRedirect("/exhibitions/index");

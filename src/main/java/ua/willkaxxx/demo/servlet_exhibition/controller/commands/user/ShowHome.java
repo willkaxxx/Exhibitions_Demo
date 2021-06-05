@@ -1,6 +1,7 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
+import ua.willkaxxx.demo.servlet_exhibition.model.entity.OrderDir;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.ExhibitionService;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,7 @@ public class ShowHome implements Command {
         request.setAttribute("exhibitions", exhibitionService.getPage(
                 Integer.parseInt(page.orElse("1")),
                 orderBy.orElse("1"),
-                dir.orElse("asc")));
+                OrderDir.valueOf(dir.orElse("desc"))));
         request.setAttribute("totalPages", exhibitionService.getTotalPages());
         request.getRequestDispatcher("/index.jsp").forward(request,response);
     }
