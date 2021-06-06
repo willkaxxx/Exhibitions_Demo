@@ -19,12 +19,8 @@ public class AppTest {
 
     private static final Logger log = Logger.getLogger(AppTest.class);
     public static void main(String[] args) throws SQLException {
-//        UserService userService = new UserService();
-//        User user = new User();
-//        user.setEmail("email");
-//        user.setPassword("pawwss");
-//        user.setRole(Role.Admin);
-//        log.info(userService.createUser(user));
+        String text = "ah@a";
+        System.out.println(text.matches("[\\S]{5,}"));
 
     }
 }

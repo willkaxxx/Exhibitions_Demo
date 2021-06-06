@@ -14,14 +14,14 @@
 <c:if test="${user.isPresent()}">
     <h1>Hello ${user.get().email}!</h1>
 </c:if>
-<p>${pageContext.request.contextPath.toString()}</p>
+
 <table border="1">
     <tr>
-        <td><a href="?orderBy=cost">Cost</a></td>
-        <td><a href="?orderBy=exhibition_name">Name</a></td>
-        <td><a href="?orderBy=subject">Subject</a></td>
-        <td><a href="?orderBy=beginning">Beginning</a></td>
-        <td><a href="?orderBy=end">End</a></td>
+        <td>Cost</td>
+        <td>Name</td>
+        <td>Subject</td>
+        <td>Beginning</td>
+        <td>End</td>
     </tr>
     <c:forEach items="${exhibitions}" var="product">
         <tr>
@@ -36,8 +36,39 @@
         </tr>
     </c:forEach>
 </table>
+
 <c:forEach begin="1" end="${totalPages}" var="i" step="1">
-    <a href="${pageContext.request.contextPath}?page=${i}">${i}</a>
+    <a href="?page=${i}"> ${i} </a>
 </c:forEach>
+<form>
+    <h2>Order by:</h2>
+    <select name="orderBy">
+        <option value="cost">Cost</option>
+        <option value="exhibition_name">Name</option>
+        <option value="subject">Subject</option>
+        <option value="beginning">Beginning</option>
+        <option value="end">End</option>
+    </select>
+    <select name="dir">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+    <h2>Filter by date:</h2>
+    <p>Beginning: </p>
+    <label>From
+        <input name="startBegin" type="date">
+    </label>
+    <label>To:
+        <input name="stopBegin" type="date">
+    </label>
+    <p>End: </p>
+    <label>From:
+        <input name="startEnd" type="date">
+    </label>
+    <label>To:
+        <input name="stopEnd" type="date">
+    </label>
+    <button type="submit">Filter</button>
+</form>
 </body>
 </html>

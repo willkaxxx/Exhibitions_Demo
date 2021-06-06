@@ -14,18 +14,17 @@ import java.util.Optional;
 public class ExhibitionService {
     private final int EXHIBITIONS_PER_PAGE = 3;
 
-    public Optional<Exhibition> getExhibition(int id){
-        try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
+    public Optional<Exhibition> getExhibition(int id) {
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
             return exhibitionDao.findById(id);
         }
     }
 
-    public Exhibition save(Exhibition exhibition){
-        try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
-            if(exhibition.getId() < 1){
+    public Exhibition save(Exhibition exhibition) {
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
+            if (exhibition.getId() < 1) {
                 exhibitionDao.create(exhibition);
-            }
-            else {
+            } else {
                 exhibitionDao.update(exhibition);
             }
             return exhibition;
@@ -34,42 +33,44 @@ public class ExhibitionService {
             return exhibition;
         }
     }
-    public List<Exhibition> getPage(int page){
-        return getPage(page, "1", OrderDir.asc);
+
+    public List<Exhibition> getPage(int page) {
+        return getPage(page, "1", OrderDir.asc, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    public List<Exhibition> getPage(int page, String orderBy, OrderDir dir){
-        try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
-            return exhibitionDao.findAllByPage(page, EXHIBITIONS_PER_PAGE, orderBy, dir);
+    public List<Exhibition> getPage(int page, String orderBy, OrderDir dir,
+                                    Optional<String> begStart, Optional<String> begStop, Optional<String> endStart, Optional<String> endStop) {
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
+            return exhibitionDao.findAllByPageFiltered(page, EXHIBITIONS_PER_PAGE, orderBy, dir, begStart, begStop, endStart, endStop);
         }
     }
 
-    public int getTotalPages(){
-        try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
+    public int getTotalPages() {
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
             int numOfRows = exhibitionDao.numberOfRows();
-            if(numOfRows % EXHIBITIONS_PER_PAGE > 0){
+            if (numOfRows % EXHIBITIONS_PER_PAGE > 0) {
                 return (numOfRows / EXHIBITIONS_PER_PAGE) + 1;
             }
-            return  numOfRows / EXHIBITIONS_PER_PAGE;
+            return numOfRows / EXHIBITIONS_PER_PAGE;
         }
     }
 
-    public boolean removeHall(Exhibition e, Hall h){
-        try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
+    public boolean removeHall(Exhibition e, Hall h) {
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
             e.getHalls().remove(h);
             return exhibitionDao.deleteHallFromExhibition(e, h);
         }
     }
 
-    public boolean addHall(Exhibition e, Hall h){
-        try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
+    public boolean addHall(Exhibition e, Hall h) {
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
             e.getHalls().add(h);
             return exhibitionDao.addHallToExhibition(e, h);
         }
     }
 
-    public void delete(int exhibitionId){
-        try(ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()){
+    public void delete(int exhibitionId) {
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
             exhibitionDao.delete(exhibitionId);
         }
     }

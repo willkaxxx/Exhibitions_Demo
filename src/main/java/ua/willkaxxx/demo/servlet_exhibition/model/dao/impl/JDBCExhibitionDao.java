@@ -234,18 +234,35 @@ public class JDBCExhibitionDao implements ExhibitionDao {
 
     @Override
     public List<Exhibition> findAllByPage(int page, int perPage, String orderBy, OrderDir dir) {
+        return findAllByPageFiltered(page,perPage,orderBy,dir,Optional.empty(),Optional.empty(),Optional.empty(),Optional.empty());
+    }
+
+    @Override
+    public List<Exhibition> findAllByPageFiltered(int page, int perPage, String orderBy, OrderDir dir,
+                                           Optional<String> begStart, Optional<String> begStop,Optional<String> endStart,Optional<String> endStop) {
         String query = "select e.*, h.*, u.* from (select * from exhibitions order by %s limit ?,?) e " +
                 "left join exhibitions_halls eh on e.exhibition_id = eh.exhibitions_id " +
                 "left join halls h on eh.halls_id = h.hall_id " +
                 "left join exhibitions_users eu on e.exhibition_id = eu.exhibitions_id " +
-                "left join users u on eu.users_id = u.user_id;";
+                "left join users u on eu.users_id = u.user_id where true";
         query = String.format(query, orderBy + " %s");
         query = String.format(query, dir.name());
+
+        if(begStart.isPresent())
+            query += " and beginning > " + begStart.get();
+        if(begStop.isPresent())
+            query += " and beginning < " + begStop.get();
+        if(endStart.isPresent())
+            query += " and end > " + endStart.get();
+        if(endStop.isPresent())
+            query += " and end < " + endStop.get();
+
+        query += ';';
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, (page - 1)*perPage);
             preparedStatement.setInt(2, perPage);
             Map<Integer, Exhibition> exhibitionMap = new HashMap<>();
-            log.info(preparedStatement.toString());
             ResultSet rs = preparedStatement.executeQuery();
             HallMapper hallMapper = new HallMapper();
             UserMapper userMapper = new UserMapper();
@@ -265,7 +282,6 @@ public class JDBCExhibitionDao implements ExhibitionDao {
                     exhibition.getHalls().add(hall);
                 }
             }
-            log.info(exhibitionMap.values());
             return new ArrayList<>(exhibitionMap.values());
         } catch (SQLException e) {
             log.error(e.getMessage(), e);

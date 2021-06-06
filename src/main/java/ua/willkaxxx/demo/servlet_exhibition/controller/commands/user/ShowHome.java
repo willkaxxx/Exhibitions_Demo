@@ -7,7 +7,10 @@ import ua.willkaxxx.demo.servlet_exhibition.model.services.ExhibitionService;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class ShowHome implements Command {
@@ -15,14 +18,40 @@ public class ShowHome implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        HttpSession session = request.getSession();
+        String[] sortParams;
+        if(session.getAttribute("sortParams") == null){
+            sortParams = new String[6];
+            sortParams[0] = "cost";
+            sortParams[1] = "asc";
+        }
+        else sortParams = (String[]) session.getAttribute("sortParams");
+
+        putParam(request.getParameter("orderBy"), 0, sortParams);
+        putParam(request.getParameter("dir"), 1, sortParams);
+        putParam(request.getParameter("startBegin"), 2, sortParams);
+        putParam(request.getParameter("stopBegin"), 3, sortParams);
+        putParam(request.getParameter("startEnd"), 4, sortParams);
+        putParam(request.getParameter("stopEnd"), 5, sortParams);
+
         Optional<String> page = Optional.ofNullable(request.getParameter("page"));
-        Optional<String> orderBy = Optional.ofNullable(request.getParameter("orderBy"));
-        Optional<String> dir = Optional.ofNullable(request.getParameter("dir"));
         request.setAttribute("exhibitions", exhibitionService.getPage(
                 Integer.parseInt(page.orElse("1")),
-                orderBy.orElse("1"),
-                OrderDir.valueOf(dir.orElse("desc"))));
+                sortParams[0],
+                OrderDir.valueOf(sortParams[1]),
+                Optional.ofNullable(sortParams[2]),
+                Optional.ofNullable(sortParams[3]),
+                Optional.ofNullable(sortParams[4]),
+                Optional.ofNullable(sortParams[5])));
+        session.setAttribute("sortParams", sortParams);
         request.setAttribute("totalPages", exhibitionService.getTotalPages());
-        request.getRequestDispatcher("/index.jsp").forward(request,response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
+    }
+
+    private void putParam(String param, int place, String[] storage){
+        if(param != null && param.length() == 0)
+            storage[place] = null;
+        if(param != null && param.length() > 0)
+            storage[place] = param;
     }
 }

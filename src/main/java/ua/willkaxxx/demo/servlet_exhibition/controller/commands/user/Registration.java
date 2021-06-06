@@ -1,6 +1,7 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
 import org.apache.log4j.Logger;
+import ua.willkaxxx.demo.servlet_exhibition.controller.Regexp;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Role;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
@@ -20,12 +21,12 @@ public class Registration implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         User user = new User();
         boolean dataValid = true;
-        if (request.getParameter("email").length() < 2) {
-            request.setAttribute("reg_email_error", "Invalid email, length must be more then 2");
+        if (!request.getParameter("email").matches(Regexp.EMAIL)) {
+            request.setAttribute("reg_email_error", true);
             dataValid = false;
         }
-        if (request.getParameter("pass").length() < 3) {
-            request.setAttribute("reg_pass_error", "Invalid password, length must be more then 3");
+        if (!request.getParameter("pass").matches(Regexp.PASSWORD)) {
+            request.setAttribute("reg_pass_error", true);
             dataValid = false;
         }
         if (dataValid) {
@@ -36,7 +37,7 @@ public class Registration implements Command {
                 userService.createUser(user);
             } catch (SQLException e) {
                 if (e.getSQLState().equals("23000")) {
-                    request.setAttribute("exist_error", "User with this email is already exists");
+                    request.setAttribute("exist_error", true);
                     request.getRequestDispatcher("/user/registration.jsp").forward(request, response);
                     return;
                 }
