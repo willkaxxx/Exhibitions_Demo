@@ -45,7 +45,7 @@ public class Hall {
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Hall)
-            return this.toString().equals(obj.toString());
+            return this.id == ((Hall) obj).id;
         return false;
     }
 

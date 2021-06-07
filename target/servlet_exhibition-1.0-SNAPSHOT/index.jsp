@@ -2,26 +2,24 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix = "demo" uri = "/WEB-INF/custom.tld"%>
 <!DOCTYPE html>
 <html>
 <head>
     <fmt:setLocale value="${lang}"/>
     <fmt:setBundle basename="local"/>
-    <title>Exhibitions catalog</title>
+    <title><fmt:message key="common.main.title"/></title>
 </head>
 <body>
 <jsp:include page="header.jsp"></jsp:include>
-<c:if test="${user.isPresent()}">
-    <h1>Hello ${user.get().email}!</h1>
-</c:if>
-
+<h1><fmt:message key="common.hello"/><demo:Hello user="${user}"/>!</h1>
 <table border="1">
     <tr>
-        <td>Cost</td>
-        <td>Name</td>
-        <td>Subject</td>
-        <td>Beginning</td>
-        <td>End</td>
+        <td><fmt:message key="entity.exhibition.cost"/></td>
+        <td><fmt:message key="entity.exhibition.name"/></td>
+        <td><fmt:message key="entity.exhibition.subject"/></td>
+        <td><fmt:message key="entity.exhibition.beginning"/></td>
+        <td><fmt:message key="entity.exhibition.end"/></td>
     </tr>
     <c:forEach items="${exhibitions}" var="product">
         <tr>
@@ -30,45 +28,47 @@
             <td><c:out value="${product.subject}" /></td>
             <td><input type="date" value="${product.getFormattedBeginning()}" readonly="readonly"></td>
             <td><input type="date" value="${product.getFormattedEnd()}" readonly="readonly"></td>
-            <c:if test="${user.isPresent() && user.get().role.ordinal() > 0}">
-                <td><a href="${pageContext.request.contextPath}/exhibitions/auth/enroll?exhibitionId=${product.id}">Enroll</a></td>
+            <c:if test="${user.isPresent() && user.get().role.ordinal() > 0 && !user.get().hasExhibition(product.id)}">
+                <td><a href="${pageContext.request.contextPath}/exhibitions/auth/enroll?exhibitionId=${product.id}"><fmt:message key="common.enroll"/></a></td>
+            </c:if>
+            <c:if test="${user.isPresent() && user.get().role.ordinal() > 0 && user.get().hasExhibition(product.id)}">
+                <td><fmt:message key="common.alreadyEnrolled"/></td>
             </c:if>
         </tr>
     </c:forEach>
 </table>
-
 <c:forEach begin="1" end="${totalPages}" var="i" step="1">
     <a href="?page=${i}"> ${i} </a>
 </c:forEach>
 <form>
-    <h2>Order by:</h2>
+    <h2><fmt:message key="common.orderBy"/>:</h2>
     <select name="orderBy">
-        <option value="cost">Cost</option>
-        <option value="exhibition_name">Name</option>
-        <option value="subject">Subject</option>
-        <option value="beginning">Beginning</option>
-        <option value="end">End</option>
+        <option value="cost" ${(sortParams[0] == 'cost') ? 'selected' : 'selected'}><fmt:message key="entity.exhibition.cost"/></option>
+        <option value="exhibition_name" ${(sortParams[0] == 'exhibition_name') ? 'selected' : ''}><fmt:message key="entity.exhibition.name"/></option>
+        <option value="subject"${(sortParams[0] == 'subject') ? 'selected' : ''}><fmt:message key="entity.exhibition.subject"/></option>
+        <option value="beginning"${(sortParams[0] == 'beginning') ? 'selected' : ''}><fmt:message key="entity.exhibition.beginning"/></option>
+        <option value="end"${(sortParams[0] == 'end') ? 'selected' : ''}><fmt:message key="entity.exhibition.end"/></option>
     </select>
     <select name="dir">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
+        <option value="asc" ${(sortParams[1] == 'asc') ? 'selected' : ''}><fmt:message key="common.ascending"/></option>
+        <option value="desc" ${(sortParams[1] == 'desc') ? 'selected' : ''}><fmt:message key="common.descending"/></option>
     </select>
-    <h2>Filter by date:</h2>
-    <p>Beginning: </p>
-    <label>From
-        <input name="startBegin" type="date">
+    <h2><fmt:message key="common.filterByDate"/>:</h2>
+    <p><fmt:message key="entity.exhibition.beginning"/>:</p>
+    <label><fmt:message key="common.from"/>:
+        <input name="startBegin" type="date" value="${sortParams[2]}">
     </label>
-    <label>To:
-        <input name="stopBegin" type="date">
+    <label><fmt:message key="common.to"/>:
+        <input name="stopBegin" type="date" value="${sortParams[3]}">
     </label>
-    <p>End: </p>
-    <label>From:
-        <input name="startEnd" type="date">
+    <p><fmt:message key="entity.exhibition.end"/>:</p>
+    <label><fmt:message key="common.from"/>:
+        <input name="startEnd" type="date" value="${sortParams[4]}">
     </label>
-    <label>To:
-        <input name="stopEnd" type="date">
-    </label>
-    <button type="submit">Filter</button>
+    <label><fmt:message key="common.to"/>:
+        <input name="stopEnd" type="date" value="${sortParams[5]}">
+    </label><br/>
+    <button type="submit"><fmt:message key="common.apply"/></button>
 </form>
 </body>
 </html>

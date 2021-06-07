@@ -24,8 +24,8 @@
         <a href="/exhibitions/redirect:/user/registration.jsp"><fmt:message key="common.registration" /></a>
     </c:if>
     <a href="/exhibitions/index"><fmt:message key="home.go" /></a>
-    <a href="?sessionLocale=en"><fmt:message key="lang.en"/></a>
-    <a href="?sessionLocale=ua"><fmt:message key="lang.ua"/></a>
+    <a href="${pageContext.request.contextPath}?sessionLocale=en"><fmt:message key="lang.en"/></a>
+    <a href="${pageContext.request.contextPath}?sessionLocale=ua"><fmt:message key="lang.ua"/></a>
     <hr>
 </header>
 

@@ -20,15 +20,19 @@
 <form action="${pageContext.request.contextPath}/exhibitions/admin/saveExhibition" id="act" method="post">
     <label><fmt:message key="entity.exhibition.name"/> :
         <input name="name" value="${editExhibition.name}" type="text">
+        <c:if test="${nName_error}"><fmt:message key="valid.error.text"/></c:if>
     </label><br>
     <label><fmt:message key="entity.exhibition.subject"/> :
         <input name="subject" value="${editExhibition.subject}" type="text">
+        <c:if test="${nSubject_error}"><fmt:message key="valid.error.text"/></c:if>
     </label><br>
     <label><fmt:message key="entity.exhibition.cost"/> :
         <input name="cost" value="${editExhibition.cost}" type="number" min="0.00" max="10000.00" step="0.01">
+        <c:if test="${nCost_error}"><fmt:message key="valid.error.decimal"/></c:if>
     </label><br>
     <label><fmt:message key="entity.exhibition.beginning"/> :
         <input name="beginning" value="${editExhibition.getFormattedBeginning()}" type="date">
+        <c:if test="${nDate_error}"><fmt:message key="valid.error.beginning"/></c:if>
     </label><br>
     <label><fmt:message key="entity.exhibition.end"/> :
         <input name="end" value="${editExhibition.getFormattedEnd()}" type="date">
@@ -64,6 +68,21 @@
         <button type="submit"><fmt:message key="common.add"/></button>
         <a href="/exhibitions/admin/addHallToExhibition?Eid=${editExhibition.id}"></a>
     </form>
+</c:if>
+<c:if test="${editExhibition.users.size() > 0}">
+    <h2><fmt:message key="entity.userTable"/>: ${editExhibition.users.size()}</h2><br/>
+    <table border="1">
+        <tr>
+            <td><fmt:message key="entity.user.id"/></td>
+            <td><fmt:message key="entity.user.email"/></td>
+        </tr>
+        <c:forEach items="${editExhibition.users}" var="user">
+            <tr>
+                <td><c:out value="${user.id}" /></td>
+                <td><c:out value="${user.email}" /></td>
+            </tr>
+        </c:forEach>
+    </table>
 </c:if>
 </body>
 </html>

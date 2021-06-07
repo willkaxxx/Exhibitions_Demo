@@ -35,7 +35,9 @@ public class ExhibitionService {
     }
 
     public List<Exhibition> getPage(int page) {
-        return getPage(page, "1", OrderDir.asc, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
+            return exhibitionDao.findAllByPage(page, EXHIBITIONS_PER_PAGE);
+        }
     }
 
     public List<Exhibition> getPage(int page, String orderBy, OrderDir dir,
@@ -45,7 +47,16 @@ public class ExhibitionService {
         }
     }
 
-    public int getTotalPages() {
+    public int getTotalPagesFiltered(Optional<String> begStart, Optional<String> begStop, Optional<String> endStart, Optional<String> endStop) {
+        try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
+            int numOfRows = exhibitionDao.numberOfRowsFiltered(begStart, begStop,  endStart, endStop);
+            if (numOfRows % EXHIBITIONS_PER_PAGE > 0) {
+                return (numOfRows / EXHIBITIONS_PER_PAGE) + 1;
+            }
+            return numOfRows / EXHIBITIONS_PER_PAGE;
+        }
+    }
+    public int getTotalPages(){
         try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
             int numOfRows = exhibitionDao.numberOfRows();
             if (numOfRows % EXHIBITIONS_PER_PAGE > 0) {

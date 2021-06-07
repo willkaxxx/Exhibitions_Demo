@@ -25,7 +25,11 @@ public class UserService {
 
     public boolean enroll(Exhibition exhibition, User user){
         try(UserDao userDao = JDBCDaoFactory.getInstance().createUserDao()){
-            return userDao.enroll(exhibition, user);
+            if(userDao.enroll(exhibition, user)){
+                user.getExhibitions().add(exhibition);
+                return true;
+            }
+            return false;
         }
     }
 

@@ -20,8 +20,7 @@ public class Exhibition {
     private List<Hall> halls = new ArrayList<>();
 
     public int getId() {
-        return id;
-    }
+        return id;    }
 
     public void setId(int id) {
         this.id = id;
@@ -130,7 +129,7 @@ public class Exhibition {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Exhibition)
-            return this.toString().equals(obj.toString());
+            return this.getId() == ((Exhibition) obj).getId();
         return false;
     }
 

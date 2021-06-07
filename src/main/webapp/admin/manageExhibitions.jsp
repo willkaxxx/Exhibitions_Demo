@@ -35,8 +35,8 @@
             <td><input type="date" value="${product.getFormattedBeginning()}" readonly="readonly"></td>
             <td><input type="date" value="${product.getFormattedEnd()}" readonly="readonly"></td>
             <td><a href="${pageContext.request.contextPath}/exhibitions/admin/editExhibition?exhibitionId=${product.getId()}">
-                    <fmt:message key="common.edit"/>
-                </a></td>
+                <fmt:message key="common.edit"/>
+            </a></td>
         </tr>
     </c:forEach>
 </table>

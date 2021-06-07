@@ -14,11 +14,9 @@ import java.util.Optional;
 public class EnrollToExhibition implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User curUser = ((Optional<User>)request.getSession().getAttribute("user")).get();
+        User curUser = ((Optional<User>) request.getSession().getAttribute("user")).get();
         new UserService().enroll(
-                new Exhibition.Builder().id(Integer.parseInt(
-                        request.getParameter("exhibitionId"))).build(),
-                curUser);
+                new Exhibition.Builder().id(Integer.parseInt(request.getParameter("exhibitionId"))).build(), curUser);
         response.sendRedirect("/exhibitions/auth/userHome");
     }
 }

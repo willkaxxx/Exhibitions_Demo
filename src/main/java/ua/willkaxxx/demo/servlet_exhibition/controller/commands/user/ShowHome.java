@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
+import ua.willkaxxx.demo.servlet_exhibition.controller.Regexp;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.OrderDir;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.ExhibitionService;
@@ -9,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public class ShowHome implements Command {
@@ -44,14 +43,18 @@ public class ShowHome implements Command {
                 Optional.ofNullable(sortParams[4]),
                 Optional.ofNullable(sortParams[5])));
         session.setAttribute("sortParams", sortParams);
-        request.setAttribute("totalPages", exhibitionService.getTotalPages());
+        request.setAttribute("totalPages", exhibitionService.getTotalPagesFiltered(
+                Optional.ofNullable(sortParams[2]),
+                Optional.ofNullable(sortParams[3]),
+                Optional.ofNullable(sortParams[4]),
+                Optional.ofNullable(sortParams[5])));
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     private void putParam(String param, int place, String[] storage){
         if(param != null && param.length() == 0)
             storage[place] = null;
-        if(param != null && param.length() > 0)
+        if(param != null && (param.matches(Regexp.SQL_FIELD_NAME) || param.matches(Regexp.DATE)))
             storage[place] = param;
     }
 }

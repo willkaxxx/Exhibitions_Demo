@@ -20,7 +20,8 @@
     <form action="${pageContext.request.contextPath}/exhibitions/admin/saveHall" method="post">
         <label><fmt:message key="entity.hall.address"/> :
             <input name="address" value="${editHall.address}">
-        </label>
+            <c:if test="${nAddress_error}"><fmt:message key="valid.error.text"/></c:if>
+        </label><br/>
         <c:if test="${editHall.id < 1}"><button type="submit"><fmt:message key="common.create"/></button></c:if>
         <c:if test="${editHall.id >= 1}"><button type="submit"><fmt:message key="common.save"/></button></c:if>
     </form>

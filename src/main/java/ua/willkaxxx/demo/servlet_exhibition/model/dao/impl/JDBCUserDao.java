@@ -91,7 +91,8 @@ public class JDBCUserDao implements UserDao {
         try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setInt(1, exhibition.getId());
             preparedStatement.setInt(2, user.getId());
-            return preparedStatement.execute();
+            preparedStatement.execute();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

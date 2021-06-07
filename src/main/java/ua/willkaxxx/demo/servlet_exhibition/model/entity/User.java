@@ -65,6 +65,14 @@ public class User implements Serializable {
         return role.name();
     }
 
+    public boolean hasExhibition(int id){
+        for(Exhibition e : exhibitions){
+            if(e.getId()==id)
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -80,7 +88,7 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof User)
-            return this.toString().equals(obj.toString());
+            return this.id == ((User) obj).id;
         return false;
     }
 }

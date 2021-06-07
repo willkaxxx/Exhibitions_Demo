@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.commands.admin.halls;
 
+import ua.willkaxxx.demo.servlet_exhibition.controller.Regexp;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.HallService;
@@ -16,7 +17,13 @@ public class SaveHall implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
         Hall hall = (Hall)session.getAttribute("editHall");
-        hall.setAddress(new String(request.getParameter("address").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+        String nextAddress = new String(request.getParameter("address").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+        if(!nextAddress.matches(Regexp.TEXT)){
+            request.setAttribute("nAddress_error", true);
+            request.getRequestDispatcher("/admin/editHall.jsp").forward(request,response);
+            return;
+        }
+        hall.setAddress(nextAddress);
         new HallService().save(hall);
         response.sendRedirect("/exhibitions/admin/manageHalls?page=1");
     }

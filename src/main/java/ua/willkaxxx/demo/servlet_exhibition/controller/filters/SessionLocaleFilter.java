@@ -12,6 +12,6 @@ public class SessionLocaleFilter implements Filter {
         if (req.getParameter("sessionLocale") != null) {
             req.getSession().setAttribute("lang", req.getParameter("sessionLocale"));
         }
-        chain.doFilter(request, response);
+        chain.doFilter(req, response);
     }
 }

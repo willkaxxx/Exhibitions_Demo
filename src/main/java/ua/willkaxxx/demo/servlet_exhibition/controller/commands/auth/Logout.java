@@ -17,7 +17,7 @@ public class Logout implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
         log.info("User " + ((Optional<User>) request.getSession().getAttribute("user")).get().getEmail() +" logged out");
-        session.setAttribute("user", Optional.empty());
+        session.setAttribute("user", null);
         response.sendRedirect("/exhibitions/index");
     }
 }

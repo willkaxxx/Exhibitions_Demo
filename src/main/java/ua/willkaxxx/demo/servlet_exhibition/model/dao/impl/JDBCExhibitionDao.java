@@ -16,7 +16,8 @@ import java.util.*;
 public class JDBCExhibitionDao implements ExhibitionDao {
     private final Logger log = Logger.getLogger(JDBCExhibitionDao.class);
     private final Connection connection;
-    public JDBCExhibitionDao(Connection connection){
+
+    public JDBCExhibitionDao(Connection connection) {
         this.connection = connection;
     }
 
@@ -105,9 +106,9 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         }
     }
 
-    public boolean addHallToExhibition(Exhibition exhibition, Hall hall){
+    public boolean addHallToExhibition(Exhibition exhibition, Hall hall) {
         final String query = "insert ignore into exhibitions_halls values (?, ?);";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(2, exhibition.getId());
             preparedStatement.setInt(1, hall.getId());
             return preparedStatement.execute();
@@ -117,9 +118,9 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         }
     }
 
-    public boolean deleteHallFromExhibition(Exhibition exhibition, Hall hall){
+    public boolean deleteHallFromExhibition(Exhibition exhibition, Hall hall) {
         final String query = "delete from exhibitions_halls where (halls_id = ? and exhibitions_id = ?);";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, hall.getId());
             preparedStatement.setInt(2, exhibition.getId());
             return preparedStatement.execute();
@@ -150,10 +151,10 @@ public class JDBCExhibitionDao implements ExhibitionDao {
                 User user = userMapper
                         .extractFromResultSet(rs);
                 exhibition = exhibitionMapper.makeUnique(exhibitionMap, exhibition);
-                if(!exhibition.getUsers().contains(user) && user.getId() > 0){
+                if (!exhibition.getUsers().contains(user) && user.getId() > 0) {
                     exhibition.getUsers().add(user);
                 }
-                if(!exhibition.getHalls().contains(hall) && hall.getId() > 0){
+                if (!exhibition.getHalls().contains(hall) && hall.getId() > 0) {
                     exhibition.getHalls().add(hall);
                 }
             }
@@ -172,7 +173,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         final String joinUserQuery = "insert ignore into exhibitions_users values (?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
              PreparedStatement joinHallStatement = connection.prepareStatement(joinHallQuery);
-        PreparedStatement joinUserStatement = connection.prepareStatement(joinUserQuery)) {
+             PreparedStatement joinUserStatement = connection.prepareStatement(joinUserQuery)) {
             connection.setAutoCommit(false);
             preparedStatement.setTimestamp(1, entity.getBeginning());
             preparedStatement.setBoolean(2, entity.isCanceled());
@@ -185,11 +186,11 @@ public class JDBCExhibitionDao implements ExhibitionDao {
 
             joinHallStatement.setInt(1, entity.getId());
             joinUserStatement.setInt(1, entity.getId());
-            for(Hall ex : entity.getHalls()){
+            for (Hall ex : entity.getHalls()) {
                 joinHallStatement.setInt(2, ex.getId());
                 joinHallStatement.execute();
             }
-            for(User ex : entity.getUsers()){
+            for (User ex : entity.getUsers()) {
                 joinUserStatement.setInt(2, ex.getId());
                 joinUserStatement.execute();
             }
@@ -211,13 +212,25 @@ public class JDBCExhibitionDao implements ExhibitionDao {
     public void delete(int id) {
         final String query = "delete from exhibitions where exhibition_id = ?;";
         final String clearHallsQuery = "delete from exhibitions_halls where exhibitions_id = ?;";
+        final String clearUsersQuery = "delete from exhibitions_users where exhibitions_id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-             PreparedStatement clearHallsStatement = connection.prepareStatement(clearHallsQuery)) {
+             PreparedStatement clearHallsStatement = connection.prepareStatement(clearHallsQuery);
+             PreparedStatement clearUsersStatement = connection.prepareStatement(clearUsersQuery)) {
+            connection.setAutoCommit(false);
             preparedStatement.setInt(1, id);
             clearHallsStatement.setInt(1, id);
             clearHallsStatement.execute();
+            clearUsersStatement.execute();
             preparedStatement.execute();
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                log.error("Error while rollback");
+                throw new RuntimeException(ex);
+            }
             log.error(e.getMessage(), e);
             e.printStackTrace();
         }
@@ -233,56 +246,18 @@ public class JDBCExhibitionDao implements ExhibitionDao {
     }
 
     @Override
-    public List<Exhibition> findAllByPage(int page, int perPage, String orderBy, OrderDir dir) {
-        return findAllByPageFiltered(page,perPage,orderBy,dir,Optional.empty(),Optional.empty(),Optional.empty(),Optional.empty());
-    }
-
-    @Override
-    public List<Exhibition> findAllByPageFiltered(int page, int perPage, String orderBy, OrderDir dir,
-                                           Optional<String> begStart, Optional<String> begStop,Optional<String> endStart,Optional<String> endStop) {
-        String query = "select e.*, h.*, u.* from (select * from exhibitions order by %s limit ?,?) e " +
-                "left join exhibitions_halls eh on e.exhibition_id = eh.exhibitions_id " +
-                "left join halls h on eh.halls_id = h.hall_id " +
-                "left join exhibitions_users eu on e.exhibition_id = eu.exhibitions_id " +
-                "left join users u on eu.users_id = u.user_id where true";
-        query = String.format(query, orderBy + " %s");
-        query = String.format(query, dir.name());
-
-        if(begStart.isPresent())
-            query += " and beginning > " + begStart.get();
-        if(begStop.isPresent())
-            query += " and beginning < " + begStop.get();
-        if(endStart.isPresent())
-            query += " and end > " + endStart.get();
-        if(endStop.isPresent())
-            query += " and end < " + endStop.get();
-
-        query += ';';
-
+    public List<Exhibition> findAllByPage(int page, int perPage) {
+        String query = "select * from  exhibitions limit ?,? ;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, (page - 1)*perPage);
+            preparedStatement.setInt(1, (page - 1) * perPage);
             preparedStatement.setInt(2, perPage);
-            Map<Integer, Exhibition> exhibitionMap = new HashMap<>();
+            List<Exhibition> exhibitionList = new ArrayList<>();
             ResultSet rs = preparedStatement.executeQuery();
-            HallMapper hallMapper = new HallMapper();
-            UserMapper userMapper = new UserMapper();
             ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
             while (rs.next()) {
-                Hall hall = hallMapper
-                        .extractFromResultSet(rs);
-                Exhibition exhibition = exhibitionMapper
-                        .extractFromResultSet(rs);
-                User user = userMapper
-                        .extractFromResultSet(rs);
-                exhibition = exhibitionMapper.makeUnique(exhibitionMap, exhibition);
-                if(!exhibition.getUsers().contains(user) && user.getId() > 0){
-                    exhibition.getUsers().add(user);
-                }
-                if(!exhibition.getHalls().contains(hall) && hall.getId() > 0){
-                    exhibition.getHalls().add(hall);
-                }
+                exhibitionList.add(exhibitionMapper.extractFromResultSet(rs));
             }
-            return new ArrayList<>(exhibitionMap.values());
+            return exhibitionList;
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
             return new ArrayList<>();
@@ -290,8 +265,118 @@ public class JDBCExhibitionDao implements ExhibitionDao {
     }
 
     @Override
+    public List<Exhibition> findAllByPageFiltered(int page, int perPage, String orderBy, OrderDir dir,
+                                                  Optional<String> begStart, Optional<String> begStop, Optional<String> endStart, Optional<String> endStop) {
+        String query = "select * from exhibitions where true";
+
+        if (begStart.isPresent())
+            query += " and beginning > '" + begStart.get() + '\'';
+        if (begStop.isPresent())
+            query += " and beginning < '" + begStop.get() + '\'';
+        if (endStart.isPresent())
+            query += " and end > '" + endStart.get() + '\'';
+        if (endStop.isPresent())
+            query += " and end < '" + endStop.get() + '\'';
+
+        query += " order by %s limit ?,? ; ";
+
+        query = String.format(query, orderBy + " %s");
+        query = String.format(query, dir.name());
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, (page - 1) * perPage);
+            preparedStatement.setInt(2, perPage);
+            List<Exhibition> exhibitionList = new ArrayList<>();
+            ResultSet rs = preparedStatement.executeQuery();
+            ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
+            while (rs.next()) {
+                exhibitionList.add(exhibitionMapper.extractFromResultSet(rs));
+            }
+            return exhibitionList;
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+//    @Override
+//    public List<Exhibition> findAllByPageFiltered(int page, int perPage, String orderBy, OrderDir dir,
+//                                                  Optional<String> begStart, Optional<String> begStop, Optional<String> endStart, Optional<String> endStop) {
+//        String query = "select e.*, h.*, u.* from (select * from exhibitions where true";
+//
+//        if (begStart.isPresent())
+//            query += " and beginning > '" + begStart.get() + '\'';
+//        if (begStop.isPresent())
+//            query += " and beginning < '" + begStop.get() + '\'';
+//        if (endStart.isPresent())
+//            query += " and end > '" + endStart.get() + '\'';
+//        if (endStop.isPresent())
+//            query += " and end < '" + endStop.get() + '\'';
+//
+//        query += " order by %s limit ?,?) e " +
+//                "left join exhibitions_halls eh on e.exhibition_id = eh.exhibitions_id " +
+//                "left join halls h on eh.halls_id = h.hall_id " +
+//                "left join exhibitions_users eu on e.exhibition_id = eu.exhibitions_id " +
+//                "left join users u on eu.users_id = u.user_id;";
+//
+//        query = String.format(query, orderBy + " %s");
+//        query = String.format(query, dir.name());
+//
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+//            preparedStatement.setInt(1, (page - 1) * perPage);
+//            preparedStatement.setInt(2, perPage);
+//            Map<Integer, Exhibition> exhibitionMap = new LinkedHashMap<>();
+//            ResultSet rs = preparedStatement.executeQuery();
+//            HallMapper hallMapper = new HallMapper();
+//            UserMapper userMapper = new UserMapper();
+//            ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
+//            while (rs.next()) {
+//                Hall hall = hallMapper
+//                        .extractFromResultSet(rs);
+//                Exhibition exhibition = exhibitionMapper
+//                        .extractFromResultSet(rs);
+//                User user = userMapper
+//                        .extractFromResultSet(rs);
+//                exhibition = exhibitionMapper.makeUnique(exhibitionMap, exhibition);
+//                if (!exhibition.getUsers().contains(user) && user.getId() > 0) {
+//                    exhibition.getUsers().add(user);
+//                }
+//                if (!exhibition.getHalls().contains(hall) && hall.getId() > 0) {
+//                    exhibition.getHalls().add(hall);
+//                }
+//            }
+//            return new ArrayList<>(exhibitionMap.values());
+//        } catch (SQLException e) {
+//            log.error(e.getMessage(), e);
+//            return new ArrayList<>();
+//        }
+//    }
+
+    @Override
     public int numberOfRows() {
         String query = "select count(*) from exhibitions;";
+        try (Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            return rs.getInt("count(*)");
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            return 0;
+        }
+    }
+
+    @Override
+    public int numberOfRowsFiltered(Optional<String> begStart, Optional<String> begStop, Optional<String> endStart, Optional<String> endStop) {
+        String query = "select count(*) from exhibitions where true";
+        if (begStart.isPresent())
+            query += " and beginning > '" + begStart.get() + '\'';
+        if (begStop.isPresent())
+            query += " and beginning < '" + begStop.get() + '\'';
+        if (endStart.isPresent())
+            query += " and end > '" + endStart.get() + '\'';
+        if (endStop.isPresent())
+            query += " and end < '" + endStop.get() + '\'';
+        query += ';';
         try (Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(query);
             rs.next();
