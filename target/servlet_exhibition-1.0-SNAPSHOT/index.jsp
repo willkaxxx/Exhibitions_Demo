@@ -91,23 +91,19 @@
             <div class="row">
                 <c:forEach items="${exhibitions}" var="product">
                     <div class="col-4 text-center">
-                        <div class="p-3 border border-dark bg-light">
+                        <div class="p-3 border rounded rounded-5 border-dark bg-light">
                             <h5 class="text-wrap"><fmt:message key="entity.exhibition.name"/>: <c:out value="${product.name}"/></h5>
                             <h6 class="text-muted"><fmt:message key="entity.exhibition.subject"/>: <c:out value="${product.subject}"/></h6>
                             <h6 class="text-muted"><fmt:message key="entity.exhibition.beginning"/>: <c:out value="${product.getFormattedBeginning()}"/></h6>
                             <h6 class="text-muted"><fmt:message key="entity.exhibition.end"/>: <c:out value="${product.getFormattedEnd()}"/></h6>
                             <h6 class="text-muted"><fmt:message key="entity.exhibition.cost"/>: <c:out value="${product.cost}"/></h6>
-<%--                            <p><c:out value="${product.name}"/></p>--%>
-<%--                            <p><c:out value="${product.subject}"/></p>--%>
-<%--                            <p><c:out value="${product.getFormattedBeginning()}"/></p>--%>
-<%--                            <p><c:out value="${product.getFormattedEnd()}"/></p>--%>
                             <c:if test="${user.isPresent() && user.get().role.ordinal() > 0}">
                                 <c:if test="${!user.get().hasExhibition(product.id)}">
                                     <a class="btn btn-primary btn-block container-fluid" href="${pageContext.request.contextPath}/exhibitions/auth/enroll?exhibitionId=${product.id}">
                                         <fmt:message key="common.enroll"/></a>
                                 </c:if>
                                 <c:if test="${user.get().hasExhibition(product.id)}">
-                                    <span class="btn btn-outline-primary btn-block container-fluid"><fmt:message key="common.alreadyEnrolled"/></span>
+                                    <span class="btn btn-outline-primary btn-block container-fluid disabled"><fmt:message key="common.alreadyEnrolled"/></span>
                                 </c:if>
                             </c:if>
                         </div>

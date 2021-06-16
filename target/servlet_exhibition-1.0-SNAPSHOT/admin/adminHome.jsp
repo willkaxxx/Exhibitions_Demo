@@ -21,7 +21,18 @@
 </head>
 <body>
 <jsp:include page="../header.jsp"></jsp:include>
-<a href="${pageContext.request.contextPath}/exhibitions/admin/manageHalls?page=1"><fmt:message key="adm.home.manageHalls"/></a><br/>
-<a href="${pageContext.request.contextPath}/exhibitions/admin/manageExhibitions?page=1"><fmt:message key="adm.home.manageExhibitions"/></a><br/>
+<br>
+<br>
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <a class="btn btn-primary btn-lg container-fluid" href="${pageContext.request.contextPath}/exhibitions/admin/manageHalls?page=1"><fmt:message key="adm.home.manageHalls"/></a>
+        </div>
+        <div class="col-6">
+            <a class="btn btn-primary btn-lg container-fluid" href="${pageContext.request.contextPath}/exhibitions/admin/manageExhibitions?page=1"><fmt:message key="adm.home.manageExhibitions"/></a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

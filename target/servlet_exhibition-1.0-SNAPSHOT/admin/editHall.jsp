@@ -21,14 +21,23 @@
     <title><fmt:message key="hall.edit.title"/></title>
 </head>
 <body>
-<jsp:include page="../header.jsp"></jsp:include>
-    <form action="${pageContext.request.contextPath}/exhibitions/admin/saveHall" method="post">
-        <label><fmt:message key="entity.hall.address"/> :
-            <input name="address" value="${editHall.address}">
-            <c:if test="${nAddress_error}"><fmt:message key="valid.error.text"/></c:if>
-        </label><br/>
-        <c:if test="${editHall.id < 1}"><button type="submit"><fmt:message key="common.create"/></button></c:if>
-        <c:if test="${editHall.id >= 1}"><button type="submit"><fmt:message key="common.save"/></button></c:if>
+<br/>
+<br/>
+<br/>
+<div class="container justify-content-center">
+    <form class="bg-light rounded rounded-5 shadow-5-strong p-5" action="${pageContext.request.contextPath}/exhibitions/admin/saveHall" method="post">
+        <div class="input-group mb-3">
+            <span class="input-group-text" ><fmt:message key="entity.hall.address"/>:</span>
+            <input name="address" class="form-control" type="text" value="${editHall.address}">
+        </div>
+            <button class="btn btn-primary btn-block" type="submit">
+                <c:if test="${editHall.id < 1}"><fmt:message key="common.create"/></c:if>
+                <c:if test="${editHall.id >= 1}"><fmt:message key="common.save"/></c:if>
+            </button>
+            <a class="btn btn-primary btn-block " href="${pageContext.request.contextPath}/exhibitions/admin/manageHalls?page=1">
+                <fmt:message key="common.cancel"/>
+            </a>
     </form>
+</div>
 </body>
 </html>

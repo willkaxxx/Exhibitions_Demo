@@ -25,8 +25,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-xl-5 col-md-8">
-            <form class="bg-white  rounded-5 shadow-5-strong p-5"
-                  action="${pageContext.request.contextPath}/exhibitions/login" method="get">
+            <form class="bg-white rounded rounded-5 shadow-5-strong p-5"
+                  action="${pageContext.request.contextPath}/exhibitions/login" method="post">
                 <div class="form-text"><h1><fmt:message key="login.title"/>:</h1></div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="LoginFormEmail"><fmt:message key="login.email"/></label>

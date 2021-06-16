@@ -28,7 +28,7 @@
         <div class="justify-content-center">
             <table class="table table-striped">
                 <thead>
-                <tr class="table-secondary">>
+                <tr class="table-secondary">
                     <td><fmt:message key="entity.exhibition.cost"/></td>
                     <td><fmt:message key="entity.exhibition.name"/></td>
                     <td><fmt:message key="entity.exhibition.subject"/></td>

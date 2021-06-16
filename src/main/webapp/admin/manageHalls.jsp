@@ -22,22 +22,37 @@
 </head>
 <body>
 <jsp:include page="../header.jsp"></jsp:include>
-    <table border="1">
-        <tr>
-            <td><fmt:message key="entity.hall.id"/></td>
-            <td><fmt:message key="entity.hall.address"/></td>
-        </tr>
-        <c:forEach items="${halls}" var="product">
-            <tr>
-                <td><c:out value="${product.getId()}" /></td>
-                <td><c:out value="${product.getAddress()}" /></td>
-                <td><a href="${pageContext.request.contextPath}/exhibitions/admin/editHall?hallId=${product.getId()}"><fmt:message key="common.edit"/></a></td>
-            </tr>
-        </c:forEach>
-    </table>
-    <c:forEach begin="1" end="${totalPages}" var="i" step="1">
-        <a href="${pageContext.request.contextPath}/exhibitions/admin/manageHalls?page=${i}">${i}</a>
-    </c:forEach>
-    <p><a href="${pageContext.request.contextPath}/exhibitions/admin/editHall?hallId=0"><fmt:message key="common.create"/></a></p>
+    <br>
+    <br>
+    <br>
+    <div class="container-fluid">
+        <div class="justify-content-center">
+            <table class="table table-striped">
+                <thead>
+                <tr class="table-secondary">
+                    <td><fmt:message key="entity.hall.id"/></td>
+                    <td><fmt:message key="entity.hall.address"/></td>
+                    <td><a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/exhibitions/admin/editHall?hallId=0"><fmt:message key="common.create"/></a></td>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${halls}" var="product">
+                    <tr>
+                        <td><c:out value="${product.getId()}" /></td>
+                        <td><c:out value="${product.getAddress()}" /></td>
+                        <td><a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/exhibitions/admin/editHall?hallId=${product.getId()}"><fmt:message key="common.edit"/></a></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-sm justify-content-center">
+            <c:forEach begin="1" end="${totalPages}" var="i" step="1">
+                <li class="page-item"><a class="page-link" href="?page=${i}"> ${i} </a></li>
+            </c:forEach>
+        </ul>
+    </nav>
 </body>
 </html>

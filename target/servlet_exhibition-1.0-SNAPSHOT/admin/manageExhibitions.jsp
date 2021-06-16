@@ -22,32 +22,48 @@
 </head>
 <body>
 <jsp:include page="../header.jsp"></jsp:include>
-<table border="1">
-    <tr>
-        <td><fmt:message key="entity.exhibition.id"/></td>
-        <td><fmt:message key="entity.exhibition.cost"/></td>
-        <td><fmt:message key="entity.exhibition.name"/></td>
-        <td><fmt:message key="entity.exhibition.subject"/></td>
-        <td><fmt:message key="entity.exhibition.beginning"/></td>
-        <td><fmt:message key="entity.exhibition.end"/></td>
-    </tr>
-    <c:forEach items="${exhibitions}" var="product">
-        <tr>
-            <td><c:out value="${product.id}" /></td>
-            <td><c:out value="${product.cost}" /></td>
-            <td><c:out value="${product.name}" /></td>
-            <td><c:out value="${product.subject}" /></td>
-            <td><input type="date" value="${product.getFormattedBeginning()}" readonly="readonly"></td>
-            <td><input type="date" value="${product.getFormattedEnd()}" readonly="readonly"></td>
-            <td><a href="${pageContext.request.contextPath}/exhibitions/admin/editExhibition?exhibitionId=${product.getId()}">
-                <fmt:message key="common.edit"/>
-            </a></td>
-        </tr>
-    </c:forEach>
-</table>
-<c:forEach begin="1" end="${totalPages}" var="i" step="1">
-    <a href="${pageContext.request.contextPath}/exhibitions/admin/manageExhibitions?page=${i}">${i}</a>
-</c:forEach>
-<a href="${pageContext.request.contextPath}/exhibitions/admin/editExhibition?exhibitionId=0"><fmt:message key="common.create"/></a>
+<br>
+<br>
+<br>
+<div class="container-fluid">
+    <div class="justify-content-center">
+        <table class="table table-striped">
+            <thead>
+            <tr class="table-secondary">
+                <td><fmt:message key="entity.exhibition.id"/></td>
+                <td><fmt:message key="entity.exhibition.cost"/></td>
+                <td><fmt:message key="entity.exhibition.name"/></td>
+                <td><fmt:message key="entity.exhibition.subject"/></td>
+                <td><fmt:message key="entity.exhibition.beginning"/></td>
+                <td><fmt:message key="entity.exhibition.end"/></td>
+                <td><a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/exhibitions/admin/editExhibition?exhibitionId=0"><fmt:message key="common.create"/></a>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${exhibitions}" var="product">
+                <tr>
+                    <td><c:out value="${product.id}" /></td>
+                    <td><c:out value="${product.cost}" /></td>
+                    <td><c:out value="${product.name}" /></td>
+                    <td><c:out value="${product.subject}" /></td>
+                    <td><c:out value="${product.getFormattedBeginning()}" /></td>
+                    <td><c:out value="${product.getFormattedEnd()}" /></td>
+                    <td><a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/exhibitions/admin/editExhibition?exhibitionId=${product.getId()}">
+                        <fmt:message key="common.edit"/>
+                    </a></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm justify-content-center">
+                <c:forEach begin="1" end="${totalPages}" var="i" step="1">
+                    <li class="page-item"><a class="page-link" href="?page=${i}"> ${i} </a></li>
+                </c:forEach>
+            </ul>
+        </nav>
+    </div>
+</div>
 </body>
 </html>
