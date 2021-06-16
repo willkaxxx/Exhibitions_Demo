@@ -7,12 +7,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class ManageExhibitions implements Command {
     ExhibitionService exhibitionService = new ExhibitionService();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("exhibitions", exhibitionService.getPage(Integer.parseInt(request.getParameter("page"))));
+        Optional<String> page = Optional.ofNullable(request.getParameter("page"));
+        request.setAttribute("exhibitions", exhibitionService.getPage(Integer.parseInt(page.orElse("1"))));
         request.setAttribute("totalPages", exhibitionService.getTotalPages());
         request.getRequestDispatcher("/admin/manageExhibitions.jsp").forward(request, response);
     }
