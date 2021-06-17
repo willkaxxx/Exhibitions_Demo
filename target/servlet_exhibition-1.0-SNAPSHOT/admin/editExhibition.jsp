@@ -26,28 +26,34 @@
 <br/>
 <div class="row">
     <div class="col-3">
-        <c:if test="${editExhibition.halls.size() > 0}">
-            <table border="1">
-                <c:forEach items="${editExhibition.halls}" var="product">
-                    <tr>
-                        <td><c:out value="${product.id}" /></td>
-                        <td><c:out value="${product.address}" /></td>
-                        <td><a href="/exhibitions/admin/deleteHallFromExhibition?Hid=${product.id}&Eid=${editExhibition.id}"><fmt:message key="common.delete"/></a></td>
-                    </tr>
-                </c:forEach>
-            </table>
-        </c:if>
-        <c:if test="${editExhibition.id > 0}">
-            <form action="/exhibitions/admin/addHallToExhibition?Hid=${hallToAdd}&Eid=${editExhibition.id}" method="post">
-                <select name="hallToAdd">
-                    <c:forEach items="${allHalls}" var="item">
-                        <option value="${item.id}">${item.address}</option>
-                    </c:forEach>
-                </select>
-                <button type="submit"><fmt:message key="common.add"/></button>
-                <a href="/exhibitions/admin/addHallToExhibition?Eid=${editExhibition.id}"></a>
-            </form>
-        </c:if>
+            <div class="container bg-light rounded rounded-5 shadow-5-strong p-5">
+                <div class="justify-content-center">
+                    <h3 class="text-muted"><fmt:message key="hall.title"/></h3>
+                    <c:if test="${editExhibition.halls.size() > 0}">
+                    <table class="table table-striped">
+                        <c:forEach items="${editExhibition.halls}" var="product">
+                            <tr>
+                                <td><c:out value="${product.address}" /></td>
+                                <td><a class="btn btn-outline-primary btn-block" href="${pageContext.request.contextPath}/exhibitions/admin/deleteHallFromExhibition?Hid=${product.id}&Eid=${editExhibition.id}"><fmt:message key="common.delete"/></a></td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                        <hr/>
+                    </c:if>
+                    <c:if test="${editExhibition.id > 0}">
+                            <form action="${pageContext.request.contextPath}/exhibitions/admin/addHallToExhibition?Hid=${hallToAdd}&Eid=${editExhibition.id}" method="post">
+                                <div class="input-group mb-3">
+                                    <select class="form-select" name="hallToAdd">
+                                        <c:forEach items="${allHalls}" var="item">
+                                            <option value="${item.id}">${item.address}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <button class="btn btn-primary btn-block input-group-text" type="submit"><fmt:message key="common.add"/></button>
+                                </div>
+                            </form>
+                    </c:if>
+                </div>
+            </div>
     </div>
     <div class="col-6">
         <div class="container justify-content-center">
@@ -63,7 +69,7 @@
                     <c:if test="${nSubject_error}"><fmt:message key="valid.error.text"/></c:if>
                 </div>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" ><fmt:message key="entity.exhibition.name"/>:</span>
+                    <span class="input-group-text" ><fmt:message key="entity.exhibition.cost"/>:</span>
                     <input class="form-control" name="cost" value="${editExhibition.cost}" type="number" min="0.00" max="10000.00" step="0.01">
                     <c:if test="${nCost_error}"><fmt:message key="valid.error.decimal"/></c:if>
                 </div>
@@ -81,7 +87,7 @@
                 </c:if>
                 <c:if test="${editExhibition.id >= 1}">
                     <button class="btn btn-primary btn-block" type="submit" form="act"><fmt:message key="common.save"/></button>
-                    <button class="btn btn-danger btn-block" type="submit" form="act" formaction="${pageContext.request.contextPath}/exhibitions/admin/deleteExhibition"><fmt:message key="common.delete"/></button>
+                    <button class="btn btn-danger btn-block" ${editExhibition.users.size() > 0 ? "disabled" : ""} type="submit" form="act" formaction="${pageContext.request.contextPath}/exhibitions/admin/deleteExhibition"><fmt:message key="common.delete"/></button>
                 </c:if>
                 <a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/exhibitions/admin/manageExhibitions?page=1">
                     <fmt:message key="common.cancel"/>
@@ -91,9 +97,11 @@
     </div>
     <div class="col-3">
         <c:if test="${editExhibition.users.size() > 0}">
-            <h2><fmt:message key="entity.userTable"/>: ${editExhibition.users.size()}</h2><br/>
-            <table border="1">
-                <tr>
+            <div class="container bg-light rounded rounded-5 shadow-5-strong p-5">
+                <div class="justify-content-center">
+                    <h3 class="text-muted"><fmt:message key="entity.userTable"/>: ${editExhibition.users.size()}</h3>
+            <table class="table table-striped">
+                <tr class="table-secondary">
                     <td><fmt:message key="entity.user.id"/></td>
                     <td><fmt:message key="entity.user.email"/></td>
                 </tr>
@@ -104,6 +112,8 @@
                     </tr>
                 </c:forEach>
             </table>
+                </div>
+            </div>
         </c:if>
     </div>
 </div>

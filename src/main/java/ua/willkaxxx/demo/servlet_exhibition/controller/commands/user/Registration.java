@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.apache.log4j.Logger;
 import ua.willkaxxx.demo.servlet_exhibition.controller.Regexp;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
@@ -31,7 +32,7 @@ public class Registration implements Command {
         }
         if (dataValid) {
             user.setEmail(request.getParameter("email"));
-            user.setPassword(request.getParameter("pass"));
+            user.setPassword(BCrypt.withDefaults().hashToString(12, request.getParameter("pass").toCharArray()));
             user.setRole(Role.Authorized);
             try {
                 userService.createUser(user);

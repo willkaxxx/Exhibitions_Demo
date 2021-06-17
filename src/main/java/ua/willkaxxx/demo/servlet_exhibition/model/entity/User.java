@@ -79,7 +79,6 @@ public class User implements Serializable {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", expired=" + expired +
-                ", password='" + password + '\'' +
                 ", role=" + role +
                 ", exhibitions number=" + exhibitions.size() +
                 '}';

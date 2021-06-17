@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.apache.log4j.Logger;
 import ua.willkaxxx.demo.servlet_exhibition.controller.Regexp;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
@@ -30,12 +31,15 @@ public class Login implements Command {
         }
         if (dataValid) {
             Optional<User> user = userService.findUser(request.getParameter("email"));
-            if (user.isPresent() && user.get().getPassword().equals(request.getParameter("pass"))) {//Todo add password encryption
-                HttpSession httpSession = request.getSession();
-                httpSession.setAttribute("user", user);
-                log.info("User : " + user.get() + " logged in");
-                response.sendRedirect("/exhibitions/index");
-                return;
+            if (user.isPresent()) {
+                BCrypt.Result result = BCrypt.verifyer().verify(request.getParameter("pass").toCharArray(), user.get().getPassword());
+                if(result.verified){
+                    HttpSession httpSession = request.getSession();
+                    httpSession.setAttribute("user", user);
+                    log.info("User : " + user.get() + " logged in");
+                    response.sendRedirect("/exhibitions/index");
+                    return;
+                }
             }
             request.setAttribute("exist_error", true);
             request.getRequestDispatcher("/user/login.jsp").forward(request, response);
