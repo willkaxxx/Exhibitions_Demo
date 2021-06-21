@@ -16,6 +16,10 @@
         <welcome-file>homeRedirect.jsp</welcome-file>
     </welcome-file-list>
 
+    <session-config>
+        <session-timeout>1</session-timeout>
+    </session-config>
+
     <error-page>
         <error-code>404</error-code>
         <location>/errors/404.jsp</location>

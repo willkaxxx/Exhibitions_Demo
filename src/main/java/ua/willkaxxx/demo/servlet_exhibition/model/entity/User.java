@@ -1,6 +1,8 @@
 package ua.willkaxxx.demo.servlet_exhibition.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,5 +91,42 @@ public class User implements Serializable {
         if(obj instanceof User)
             return this.id == ((User) obj).id;
         return false;
+    }
+
+    public static class Builder {
+        private final User user;
+
+        public Builder() {
+            user = new User();
+        }
+
+        public User.Builder id(int id) {
+            user.id = id;
+            return this;
+        }
+
+        public User.Builder email(String email) {
+            user.email = email;
+            return this;
+        }
+
+        public User.Builder expired(boolean expired) {
+            user.expired = expired;
+            return this;
+        }
+
+        public User.Builder password(String password) {
+            user.password = password;
+            return this;
+        }
+
+        public User.Builder role(Role role) {
+            user.role = role;
+            return this;
+        }
+
+        public User build() {
+            return user;
+        }
     }
 }

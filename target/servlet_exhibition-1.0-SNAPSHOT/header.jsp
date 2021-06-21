@@ -40,7 +40,7 @@
                                 key="common.registration"/></a></li>
                     </c:if>
                     <c:if test="${user.isPresent()}">
-                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/exhibitions/user/logout"><fmt:message
+                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/exhibitions/auth/logout"><fmt:message
                                 key="common.logout"/></a>
                         </li>
                         <c:if test="${user.get().role.ordinal() == 2}">

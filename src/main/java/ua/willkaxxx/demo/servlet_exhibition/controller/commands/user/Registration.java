@@ -1,12 +1,8 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.apache.log4j.Logger;
-import ua.willkaxxx.demo.servlet_exhibition.controller.Regexp;
+import ua.willkaxxx.demo.servlet_exhibition.model.services.AuthService;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
-import ua.willkaxxx.demo.servlet_exhibition.model.entity.Role;
-import ua.willkaxxx.demo.servlet_exhibition.model.entity.User;
-import ua.willkaxxx.demo.servlet_exhibition.model.services.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,26 +12,14 @@ import java.sql.SQLException;
 
 public class Registration implements Command {
     private final Logger log = Logger.getLogger(Registration.class);
-    UserService userService = new UserService();
+    AuthService authService = new AuthService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User user = new User();
-        boolean dataValid = true;
-        if (!request.getParameter("email").matches(Regexp.EMAIL)) {
-            request.setAttribute("reg_email_error", true);
-            dataValid = false;
-        }
-        if (!request.getParameter("pass").matches(Regexp.PASSWORD)) {
-            request.setAttribute("reg_pass_error", true);
-            dataValid = false;
-        }
-        if (dataValid) {
-            user.setEmail(request.getParameter("email"));
-            user.setPassword(BCrypt.withDefaults().hashToString(12, request.getParameter("pass").toCharArray()));
-            user.setRole(Role.Authorized);
+        if (authService.checkCredentials(request)) {
             try {
-                userService.createUser(user);
+                authService.register(request);
+                authService.login(request);
             } catch (SQLException e) {
                 if (e.getSQLState().equals("23000")) {
                     request.setAttribute("exist_error", true);
@@ -44,7 +28,6 @@ public class Registration implements Command {
                 }
                 log.error(e.getMessage());
             }
-            log.info("New user registered: " + user);
             response.sendRedirect("/exhibitions/index");
             return;
         }

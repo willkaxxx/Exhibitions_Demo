@@ -15,6 +15,7 @@ import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.ShowHome;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,7 +29,8 @@ public class Servlet extends HttpServlet {
     private final Map<String, Command> commands = new HashMap<>();
 
     public void init() {
-        commands.put("user/logout", new Logout());
+        getServletContext().setAttribute("loggedUsers", new HashSet<String>());
+
         commands.put("login", new Login());
         commands.put("registration", new Registration());
 
@@ -45,6 +47,7 @@ public class Servlet extends HttpServlet {
         commands.put("index", new ShowHome());
         commands.put("auth/enroll", new EnrollToExhibition());
         commands.put("auth/userHome", new UserHome());
+        commands.put("auth/logout", new Logout());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

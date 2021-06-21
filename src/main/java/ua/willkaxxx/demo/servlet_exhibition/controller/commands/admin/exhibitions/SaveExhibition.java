@@ -17,8 +17,8 @@ public class SaveExhibition implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Exhibition exhibition = (Exhibition) request.getSession().getAttribute("editExhibition");
 
-        String name = new String(request.getParameter("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-        String subject = new String(request.getParameter("subject").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+        String name = request.getParameter("name");
+        String subject = request.getParameter("subject");
 
         boolean dataValid = true;
 

@@ -17,7 +17,7 @@ public class SaveHall implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
         Hall hall = (Hall)session.getAttribute("editHall");
-        String nextAddress = new String(request.getParameter("address").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+        String nextAddress = request.getParameter("address");
         if(!nextAddress.matches(Regexp.TEXT)){
             request.setAttribute("nAddress_error", true);
             request.getRequestDispatcher("/admin/editHall.jsp").forward(request,response);

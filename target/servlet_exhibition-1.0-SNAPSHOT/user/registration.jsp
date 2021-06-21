@@ -21,6 +21,11 @@
     <title><fmt:message key="registration.title"/></title>
 </head>
 <body>
+<%
+    response.setHeader("Pragma", "No-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setDateHeader("Expires", -1);
+%>
 <jsp:include page="../header.jsp"></jsp:include>
 <div class="container">
     <div class="row justify-content-center">
