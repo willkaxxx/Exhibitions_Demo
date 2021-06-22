@@ -10,7 +10,11 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class ManageExhibitions implements Command {
-    ExhibitionService exhibitionService = new ExhibitionService();
+    ExhibitionService exhibitionService;
+
+    public ManageExhibitions(ExhibitionService exhibitionService){
+        this.exhibitionService = exhibitionService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Optional<String> page = Optional.ofNullable(request.getParameter("page"));

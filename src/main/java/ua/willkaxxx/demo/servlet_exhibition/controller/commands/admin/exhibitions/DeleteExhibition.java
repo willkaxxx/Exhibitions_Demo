@@ -10,10 +10,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DeleteExhibition implements Command {
+    ExhibitionService exhibitionService;
+
+    public DeleteExhibition(ExhibitionService exhibitionService){
+        this.exhibitionService = exhibitionService;
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int exhibition = ((Exhibition) request.getSession().getAttribute("editExhibition")).getId();
-        new ExhibitionService().delete(exhibition);
+        exhibitionService.delete(exhibition);
         response.sendRedirect("/exhibitions/admin/manageExhibitions?page=1");
     }
 }

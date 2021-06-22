@@ -11,9 +11,13 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class UserHome implements Command {
+    UserService userService;
+    public UserHome(UserService userService){
+        this.userService = userService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("userExhibitions", new UserService().getExhibitions(
+        request.setAttribute("userExhibitions", userService.getExhibitions(
                 ((Optional<User>) request.getSession().getAttribute("user")).get()));
         request.getRequestDispatcher("/auth/userHome.jsp").forward(request, response);
     }

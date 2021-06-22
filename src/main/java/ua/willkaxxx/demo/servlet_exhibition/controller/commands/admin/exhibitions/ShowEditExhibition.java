@@ -11,7 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ShowEditExhibition implements Command {
-    ExhibitionService exhibitionService = new ExhibitionService();
+    ExhibitionService exhibitionService;
+
+    public ShowEditExhibition(ExhibitionService exhibitionService){
+        this.exhibitionService = exhibitionService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.getSession().setAttribute("editExhibition", exhibitionService.getExhibition(

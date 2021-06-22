@@ -112,7 +112,6 @@ public class JDBCUserDao implements UserDao {
             while (rs.next()) {
                 exhibitions.add(exhibitionMapper.extractFromResultSet(rs));
             }
-            log.info(exhibitions);
             return exhibitions;
         } catch (SQLException e) {
             log.error(e.getMessage());

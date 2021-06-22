@@ -51,6 +51,9 @@
                 <c:if test="${exist_error}">
                     <div class="form-text"><fmt:message key="login.noUser"/></div>
                 </c:if>
+                <c:if test="${logged_error}">
+                    <div class="form-text"><fmt:message key="login.logged"/></div>
+                </c:if>
             </form>
         </div>
     </div>

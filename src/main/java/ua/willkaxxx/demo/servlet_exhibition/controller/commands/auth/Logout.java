@@ -9,7 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Logout implements Command {
-    AuthService authService = new AuthService();
+    AuthService authService;
+
+    public Logout(AuthService authService){
+        this.authService = authService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         authService.logout(request);

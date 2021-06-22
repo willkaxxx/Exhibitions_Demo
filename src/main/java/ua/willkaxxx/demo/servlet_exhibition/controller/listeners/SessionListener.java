@@ -30,4 +30,5 @@ public class SessionListener implements HttpSessionListener {
                 log.info("User " + userEmail + " logged out : Session timed out");
         }
     }
+
 }

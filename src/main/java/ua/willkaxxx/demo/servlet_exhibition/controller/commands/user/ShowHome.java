@@ -2,6 +2,7 @@ package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
 import ua.willkaxxx.demo.servlet_exhibition.controller.Regexp;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
+import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.OrderDir;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.ExhibitionService;
 
@@ -13,7 +14,11 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class ShowHome implements Command {
-    ExhibitionService exhibitionService = new ExhibitionService();
+    ExhibitionService exhibitionService;
+
+    public ShowHome(ExhibitionService exhibitionService){
+        this.exhibitionService = exhibitionService;
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

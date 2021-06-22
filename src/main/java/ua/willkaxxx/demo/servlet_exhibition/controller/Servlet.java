@@ -12,6 +12,10 @@ import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.Login;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.auth.Logout;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.Registration;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.user.ShowHome;
+import ua.willkaxxx.demo.servlet_exhibition.model.services.AuthService;
+import ua.willkaxxx.demo.servlet_exhibition.model.services.ExhibitionService;
+import ua.willkaxxx.demo.servlet_exhibition.model.services.HallService;
+import ua.willkaxxx.demo.servlet_exhibition.model.services.UserService;
 
 import java.io.*;
 import java.util.HashMap;
@@ -28,26 +32,31 @@ public class Servlet extends HttpServlet {
     private final Logger log = Logger.getLogger(Servlet.class);
     private final Map<String, Command> commands = new HashMap<>();
 
+    private final AuthService authService = new AuthService();
+    private final HallService hallService = new HallService();
+    private  final UserService userService = new UserService();
+    private final ExhibitionService exhibitionService = new ExhibitionService();
+
     public void init() {
         getServletContext().setAttribute("loggedUsers", new HashSet<String>());
 
-        commands.put("login", new Login());
-        commands.put("registration", new Registration());
+        commands.put("login", new Login(authService));
+        commands.put("registration", new Registration(authService));
+        commands.put("index", new ShowHome(exhibitionService));
 
-        commands.put("admin/manageHalls", new ManageHalls());
-        commands.put("admin/editHall", new ShowEditHall());
-        commands.put("admin/saveHall", new SaveHall());
-        commands.put("admin/manageExhibitions", new ManageExhibitions());
-        commands.put("admin/editExhibition", new ShowEditExhibition());
-        commands.put("admin/saveExhibition", new SaveExhibition());
-        commands.put("admin/deleteHallFromExhibition", new DeleteHallFromExhibition());
-        commands.put("admin/addHallToExhibition", new AddHallToExhibition());
-        commands.put("admin/deleteExhibition", new DeleteExhibition());
+        commands.put("admin/manageHalls", new ManageHalls(hallService));
+        commands.put("admin/editHall", new ShowEditHall(hallService));
+        commands.put("admin/saveHall", new SaveHall(hallService));
+        commands.put("admin/manageExhibitions", new ManageExhibitions(exhibitionService));
+        commands.put("admin/editExhibition", new ShowEditExhibition(exhibitionService));
+        commands.put("admin/saveExhibition", new SaveExhibition(exhibitionService));
+        commands.put("admin/deleteHallFromExhibition", new DeleteHallFromExhibition(exhibitionService));
+        commands.put("admin/addHallToExhibition", new AddHallToExhibition(exhibitionService));
+        commands.put("admin/deleteExhibition", new DeleteExhibition(exhibitionService));
 
-        commands.put("index", new ShowHome());
-        commands.put("auth/enroll", new EnrollToExhibition());
-        commands.put("auth/userHome", new UserHome());
-        commands.put("auth/logout", new Logout());
+        commands.put("auth/enroll", new EnrollToExhibition(userService));
+        commands.put("auth/userHome", new UserHome(userService));
+        commands.put("auth/logout", new Logout(authService));
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

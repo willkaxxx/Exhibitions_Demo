@@ -13,6 +13,11 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 
 public class SaveExhibition implements Command {
+    ExhibitionService exhibitionService;
+
+    public SaveExhibition(ExhibitionService exhibitionService){
+        this.exhibitionService = exhibitionService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Exhibition exhibition = (Exhibition) request.getSession().getAttribute("editExhibition");
@@ -49,7 +54,7 @@ public class SaveExhibition implements Command {
         exhibition.setBeginning(request.getParameter("beginning"));
         exhibition.setEnd(request.getParameter("end"));
 
-        new ExhibitionService().save(exhibition);
+        exhibitionService.save(exhibition);
         response.sendRedirect("/exhibitions/admin/manageExhibitions?page=1");
     }
 }

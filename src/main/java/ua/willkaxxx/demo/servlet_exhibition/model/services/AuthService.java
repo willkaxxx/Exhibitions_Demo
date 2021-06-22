@@ -15,19 +15,6 @@ import java.util.Optional;
 public class AuthService {
     private final Logger log = Logger.getLogger(AuthService.class);
 
-    public boolean checkCredentials(HttpServletRequest request) {
-        boolean dataValid = true;
-        if (!request.getParameter("email").matches(Regexp.EMAIL)) {
-            request.setAttribute("reg_email_error", true);
-            dataValid = false;
-        }
-        if (!request.getParameter("pass").matches(Regexp.PASSWORD)) {
-            request.setAttribute("reg_pass_error", true);
-            dataValid = false;
-        }
-        return dataValid;
-    }
-
     public void register(HttpServletRequest request) throws SQLException {
         UserService userService = new UserService();
         User user = new User.Builder().
@@ -61,7 +48,12 @@ public class AuthService {
                 log.info("User : " + user.get().getEmail() + " logged in");
                 return true;
             }
+            if(result.verified){
+                request.setAttribute("logged_error", true);
+                return false;
+            }
         }
+        request.setAttribute("exist_error", true);
         return false;
     }
 }

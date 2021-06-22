@@ -10,7 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ShowEditHall implements Command {
-    HallService hallService = new HallService();
+    HallService hallService;
+
+    public ShowEditHall(HallService hallService){
+        this.hallService = hallService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.getSession().setAttribute("editHall", hallService.getHall(

@@ -11,9 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DeleteHallFromExhibition implements Command {
+    ExhibitionService exhibitionService;
+
+    public DeleteHallFromExhibition(ExhibitionService exhibitionService){
+        this.exhibitionService = exhibitionService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        new ExhibitionService().removeHall(
+        exhibitionService.removeHall(
                 new Exhibition.Builder().id(Integer.parseInt(request.getParameter("Eid"))).build(),
                 new Hall.Builder().id(Integer.parseInt(request.getParameter("Hid"))).build());
 

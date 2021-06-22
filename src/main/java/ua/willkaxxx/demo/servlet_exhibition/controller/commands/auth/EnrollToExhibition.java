@@ -12,11 +12,15 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class EnrollToExhibition implements Command {
+    UserService userService;
+    public EnrollToExhibition(UserService userService){
+        this.userService = userService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User curUser = ((Optional<User>) request.getSession().getAttribute("user")).get();
-        new UserService().enroll(
-                new Exhibition.Builder().id(Integer.parseInt(request.getParameter("exhibitionId"))).build(), curUser);
+        userService.enroll(
+                new Exhibition.Builder().id(Integer.parseInt(request.getParameter("exhibitionId"))).build(),
+                ((Optional<User>) request.getSession().getAttribute("user")).get());
         response.sendRedirect("/exhibitions/auth/userHome");
     }
 }

@@ -11,8 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddHallToExhibition implements Command {
+    ExhibitionService exhibitionService;
+
+    public AddHallToExhibition(ExhibitionService exhibitionService){
+        this.exhibitionService = exhibitionService;
+    }
+
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        new ExhibitionService().addHall(
+        exhibitionService.addHall(
                 new Exhibition.Builder().id(Integer.parseInt(request.getParameter("Eid"))).build(),
                 new Hall.Builder().id(Integer.parseInt(request.getParameter("hallToAdd"))).build());
         response.sendRedirect("/exhibitions/admin/editExhibition?exhibitionId=" +

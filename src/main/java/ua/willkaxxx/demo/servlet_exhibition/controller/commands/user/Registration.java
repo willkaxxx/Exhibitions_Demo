@@ -1,6 +1,7 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.commands.user;
 
 import org.apache.log4j.Logger;
+import ua.willkaxxx.demo.servlet_exhibition.controller.Regexp;
 import ua.willkaxxx.demo.servlet_exhibition.model.services.AuthService;
 import ua.willkaxxx.demo.servlet_exhibition.controller.commands.Command;
 
@@ -12,11 +13,24 @@ import java.sql.SQLException;
 
 public class Registration implements Command {
     private final Logger log = Logger.getLogger(Registration.class);
-    AuthService authService = new AuthService();
+    AuthService authService;
+
+    public Registration(AuthService authService){
+        this.authService = authService;
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (authService.checkCredentials(request)) {
+        boolean dataValid = true;
+        if (request.getParameter("email") != null && !request.getParameter("email").matches(Regexp.EMAIL)) {
+            request.setAttribute("reg_email_error", true);
+            dataValid = false;
+        }
+        if (request.getParameter("pass") != null &&  !request.getParameter("pass").matches(Regexp.PASSWORD)) {
+            request.setAttribute("reg_pass_error", true);
+            dataValid = false;
+        }
+        if (dataValid) {
             try {
                 authService.register(request);
                 authService.login(request);

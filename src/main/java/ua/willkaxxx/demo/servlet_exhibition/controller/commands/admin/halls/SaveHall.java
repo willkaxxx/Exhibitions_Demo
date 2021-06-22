@@ -13,6 +13,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class SaveHall implements Command {
+    HallService hallService;
+
+    public SaveHall(HallService hallService){
+        this.hallService = hallService;
+    }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
@@ -24,7 +29,7 @@ public class SaveHall implements Command {
             return;
         }
         hall.setAddress(nextAddress);
-        new HallService().save(hall);
+        hallService.save(hall);
         response.sendRedirect("/exhibitions/admin/manageHalls?page=1");
     }
 }
