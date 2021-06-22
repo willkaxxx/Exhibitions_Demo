@@ -19,8 +19,8 @@ public class DeleteHallFromExhibition implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         exhibitionService.removeHall(
-                new Exhibition.Builder().id(Integer.parseInt(request.getParameter("Eid"))).build(),
-                new Hall.Builder().id(Integer.parseInt(request.getParameter("Hid"))).build());
+                Integer.parseInt(request.getParameter("Eid")),
+                Integer.parseInt(request.getParameter("Hid")));
 
         response.sendRedirect("/exhibitions/admin/editExhibition?exhibitionId=" +
                 ((Exhibition)request.getSession().getAttribute("editExhibition")).getId());

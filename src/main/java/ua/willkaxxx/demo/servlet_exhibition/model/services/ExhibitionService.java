@@ -66,16 +66,15 @@ public class ExhibitionService {
         }
     }
 
-    public boolean removeHall(Exhibition e, Hall h) {
+    public boolean removeHall(int e, int h) {
         try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
-            e.getHalls().remove(h);
-            return exhibitionDao.deleteHallFromExhibition(e, h);
+            exhibitionDao.deleteHallFromExhibition(e, h);
+            return true;
         }
     }
 
-    public boolean addHall(Exhibition e, Hall h) {
+    public boolean addHall(int e, int h) {
         try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
-            e.getHalls().add(h);
             return exhibitionDao.addHallToExhibition(e, h);
         }
     }

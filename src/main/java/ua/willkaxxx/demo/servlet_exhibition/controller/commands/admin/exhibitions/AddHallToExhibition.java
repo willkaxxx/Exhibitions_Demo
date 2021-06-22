@@ -19,8 +19,8 @@ public class AddHallToExhibition implements Command {
 
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         exhibitionService.addHall(
-                new Exhibition.Builder().id(Integer.parseInt(request.getParameter("Eid"))).build(),
-                new Hall.Builder().id(Integer.parseInt(request.getParameter("hallToAdd"))).build());
+                Integer.parseInt(request.getParameter("Eid")),
+                Integer.parseInt(request.getParameter("hallToAdd")));
         response.sendRedirect("/exhibitions/admin/editExhibition?exhibitionId=" +
                 ((Exhibition)request.getSession().getAttribute("editExhibition")).getId());
     }

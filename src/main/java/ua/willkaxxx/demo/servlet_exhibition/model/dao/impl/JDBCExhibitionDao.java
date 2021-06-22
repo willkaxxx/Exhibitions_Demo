@@ -106,11 +106,11 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         }
     }
 
-    public boolean addHallToExhibition(Exhibition exhibition, Hall hall) {
+    public boolean addHallToExhibition(int exhibitionId, int hallId) {
         final String query = "insert ignore into exhibitions_halls values (?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(2, exhibition.getId());
-            preparedStatement.setInt(1, hall.getId());
+            preparedStatement.setInt(2, exhibitionId);
+            preparedStatement.setInt(1, hallId);
             return preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,11 +118,11 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         }
     }
 
-    public boolean deleteHallFromExhibition(Exhibition exhibition, Hall hall) {
+    public boolean deleteHallFromExhibition(int exhibitionId, int hallId) {
         final String query = "delete from exhibitions_halls where (halls_id = ? and exhibitions_id = ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, hall.getId());
-            preparedStatement.setInt(2, exhibition.getId());
+            preparedStatement.setInt(1, hallId);
+            preparedStatement.setInt(2, exhibitionId);
             return preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();

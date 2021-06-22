@@ -1,7 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.model.dao;
 
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
-import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.OrderDir;
 
 import java.util.List;
@@ -13,6 +12,6 @@ public interface ExhibitionDao extends GenericDao<Exhibition> {
                                            Optional<String> begStart, Optional<String> begStop,Optional<String> endStart,Optional<String> endStop);
     int numberOfRows();
     int numberOfRowsFiltered(Optional<String> begStart, Optional<String> begStop,Optional<String> endStart,Optional<String> endStop);
-    boolean deleteHallFromExhibition(Exhibition exhibition, Hall hall);
-    boolean addHallToExhibition(Exhibition exhibition, Hall hall);
+    boolean deleteHallFromExhibition(int exhibitionId, int hallId);
+    boolean addHallToExhibition(int exhibitionId, int hallId);
 }
