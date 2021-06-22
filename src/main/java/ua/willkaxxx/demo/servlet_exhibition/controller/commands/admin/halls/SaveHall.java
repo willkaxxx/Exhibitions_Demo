@@ -23,11 +23,13 @@ public class SaveHall implements Command {
         HttpSession session = request.getSession();
         Hall hall = (Hall)session.getAttribute("editHall");
         String nextAddress = request.getParameter("address");
+
         if(!nextAddress.matches(Regexp.TEXT)){
             request.setAttribute("nAddress_error", true);
             request.getRequestDispatcher("/admin/editHall.jsp").forward(request,response);
             return;
         }
+
         hall.setAddress(nextAddress);
         hallService.save(hall);
         response.sendRedirect("/exhibitions/admin/manageHalls?page=1");
