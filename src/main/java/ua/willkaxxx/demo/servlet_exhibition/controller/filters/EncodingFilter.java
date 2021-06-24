@@ -14,5 +14,4 @@ public class EncodingFilter implements Filter {
         servletRequest.setCharacterEncoding("UTF-8");
         filterChain.doFilter(servletRequest,servletResponse);
     }
-
 }

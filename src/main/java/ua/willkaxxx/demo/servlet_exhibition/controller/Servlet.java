@@ -34,7 +34,7 @@ public class Servlet extends HttpServlet {
 
     private final AuthService authService = new AuthService();
     private final HallService hallService = new HallService();
-    private  final UserService userService = new UserService();
+    private final UserService userService = new UserService();
     private final ExhibitionService exhibitionService = new ExhibitionService();
 
     public void init() {

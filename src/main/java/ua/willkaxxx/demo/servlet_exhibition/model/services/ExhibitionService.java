@@ -3,7 +3,6 @@ package ua.willkaxxx.demo.servlet_exhibition.model.services;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.ExhibitionDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
-import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.OrderDir;
 
 
@@ -66,16 +65,16 @@ public class ExhibitionService {
         }
     }
 
-    public boolean removeHall(int e, int h) {
+    public boolean removeHall(int exhibitionId, int hallId) {
         try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
-            exhibitionDao.deleteHallFromExhibition(e, h);
+            exhibitionDao.deleteHallFromExhibition(exhibitionId, hallId);
             return true;
         }
     }
 
-    public boolean addHall(int e, int h) {
+    public boolean addHall(int exhibitionId, int hallId) {
         try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {
-            return exhibitionDao.addHallToExhibition(e, h);
+            return exhibitionDao.addHallToExhibition(exhibitionId, hallId);
         }
     }
 

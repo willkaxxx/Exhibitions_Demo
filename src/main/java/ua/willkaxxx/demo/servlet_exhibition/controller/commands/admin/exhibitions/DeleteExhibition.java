@@ -18,8 +18,8 @@ public class DeleteExhibition implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        int exhibition = ((Exhibition) request.getSession().getAttribute("editExhibition")).getId();
-        exhibitionService.delete(exhibition);
+        exhibitionService.delete(
+                ((Exhibition) request.getSession().getAttribute("editExhibition")).getId());
         response.sendRedirect("/exhibitions/admin/manageExhibitions?page=1");
     }
 }

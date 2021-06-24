@@ -33,8 +33,8 @@ public class HallService {
                 hallDao.update(hall);
             }
             return hall;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return hall;
         }
     }

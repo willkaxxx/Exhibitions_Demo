@@ -11,7 +11,6 @@ import java.io.IOException;
 
 public class ShowEditHall implements Command {
     HallService hallService;
-
     public ShowEditHall(HallService hallService){
         this.hallService = hallService;
     }

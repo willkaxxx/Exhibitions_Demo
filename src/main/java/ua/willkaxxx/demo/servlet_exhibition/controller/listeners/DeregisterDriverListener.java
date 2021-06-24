@@ -1,7 +1,5 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller.listeners;
 
-
-
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 
 import javax.servlet.ServletContextEvent;
