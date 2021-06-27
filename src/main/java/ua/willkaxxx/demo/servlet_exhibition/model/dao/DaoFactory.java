@@ -1,6 +1,5 @@
 package ua.willkaxxx.demo.servlet_exhibition.model.dao;
 
-import ua.willkaxxx.demo.servlet_exhibition.AppTest;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 
 public abstract class DaoFactory {

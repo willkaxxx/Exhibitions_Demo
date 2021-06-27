@@ -32,12 +32,8 @@ public class JDBCExhibitionDao implements ExhibitionDao {
              PreparedStatement joinUserPreparedStatement = connection.prepareStatement(joinUserQuery);
              Statement lastId = connection.createStatement()) {
             connection.setAutoCommit(false);
-            createPreparedStatement.setTimestamp(1, entity.getBeginning());
-            createPreparedStatement.setBoolean(2, entity.isCanceled());
-            createPreparedStatement.setBigDecimal(3, entity.getCost());
-            createPreparedStatement.setTimestamp(4, entity.getEnd());
-            createPreparedStatement.setString(5, entity.getName());
-            createPreparedStatement.setString(6, entity.getSubject());
+
+            fillPreparedStatement(entity, createPreparedStatement);
             createPreparedStatement.execute();
 
             ResultSet tmp = lastId.executeQuery(findId);
@@ -68,6 +64,15 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             }
             e.printStackTrace();
         }
+    }
+
+    private void fillPreparedStatement(Exhibition entity, PreparedStatement createPreparedStatement) throws SQLException {
+        createPreparedStatement.setTimestamp(1, entity.getBeginning());
+        createPreparedStatement.setBoolean(2, entity.isCanceled());
+        createPreparedStatement.setBigDecimal(3, entity.getCost());
+        createPreparedStatement.setTimestamp(4, entity.getEnd());
+        createPreparedStatement.setString(5, entity.getName());
+        createPreparedStatement.setString(6, entity.getSubject());
     }
 
     @Override
@@ -175,13 +180,9 @@ public class JDBCExhibitionDao implements ExhibitionDao {
              PreparedStatement joinHallStatement = connection.prepareStatement(joinHallQuery);
              PreparedStatement joinUserStatement = connection.prepareStatement(joinUserQuery)) {
             connection.setAutoCommit(false);
-            preparedStatement.setTimestamp(1, entity.getBeginning());
-            preparedStatement.setBoolean(2, entity.isCanceled());
-            preparedStatement.setBigDecimal(3, entity.getCost());
-            preparedStatement.setTimestamp(4, entity.getEnd());
-            preparedStatement.setString(5, entity.getName());
-            preparedStatement.setString(6, entity.getSubject());
-            preparedStatement.setInt(7, entity.getId());
+
+            fillPreparedStatement(entity, preparedStatement);
+
             preparedStatement.execute();
 
             joinHallStatement.setInt(1, entity.getId());
@@ -265,7 +266,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
     }
 
     @Override
-    public List<Exhibition> findAllByPageFiltered(int page, int perPage, String orderBy, OrderDir dir,
+    public List<Exhibition> findAllByPageFiltered(int page, int perPage, String orderBy, OrderDir direction,
                                                   Optional<String> begStart, Optional<String> begStop, Optional<String> endStart, Optional<String> endStop) {
         String query = "select * from exhibitions where true";
 
@@ -281,7 +282,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         query += " order by %s limit ?,? ; ";
 
         query = String.format(query, orderBy + " %s");
-        query = String.format(query, dir.name());
+        query = String.format(query, direction.name());
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, (page - 1) * perPage);
@@ -298,59 +299,6 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             return new ArrayList<>();
         }
     }
-
-//    @Override
-//    public List<Exhibition> findAllByPageFiltered(int page, int perPage, String orderBy, OrderDir dir,
-//                                                  Optional<String> begStart, Optional<String> begStop, Optional<String> endStart, Optional<String> endStop) {
-//        String query = "select e.*, h.*, u.* from (select * from exhibitions where true";
-//
-//        if (begStart.isPresent())
-//            query += " and beginning > '" + begStart.get() + '\'';
-//        if (begStop.isPresent())
-//            query += " and beginning < '" + begStop.get() + '\'';
-//        if (endStart.isPresent())
-//            query += " and end > '" + endStart.get() + '\'';
-//        if (endStop.isPresent())
-//            query += " and end < '" + endStop.get() + '\'';
-//
-//        query += " order by %s limit ?,?) e " +
-//                "left join exhibitions_halls eh on e.exhibition_id = eh.exhibitions_id " +
-//                "left join halls h on eh.halls_id = h.hall_id " +
-//                "left join exhibitions_users eu on e.exhibition_id = eu.exhibitions_id " +
-//                "left join users u on eu.users_id = u.user_id;";
-//
-//        query = String.format(query, orderBy + " %s");
-//        query = String.format(query, dir.name());
-//
-//        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-//            preparedStatement.setInt(1, (page - 1) * perPage);
-//            preparedStatement.setInt(2, perPage);
-//            Map<Integer, Exhibition> exhibitionMap = new LinkedHashMap<>();
-//            ResultSet rs = preparedStatement.executeQuery();
-//            HallMapper hallMapper = new HallMapper();
-//            UserMapper userMapper = new UserMapper();
-//            ExhibitionMapper exhibitionMapper = new ExhibitionMapper();
-//            while (rs.next()) {
-//                Hall hall = hallMapper
-//                        .extractFromResultSet(rs);
-//                Exhibition exhibition = exhibitionMapper
-//                        .extractFromResultSet(rs);
-//                User user = userMapper
-//                        .extractFromResultSet(rs);
-//                exhibition = exhibitionMapper.makeUnique(exhibitionMap, exhibition);
-//                if (!exhibition.getUsers().contains(user) && user.getId() > 0) {
-//                    exhibition.getUsers().add(user);
-//                }
-//                if (!exhibition.getHalls().contains(hall) && hall.getId() > 0) {
-//                    exhibition.getHalls().add(hall);
-//                }
-//            }
-//            return new ArrayList<>(exhibitionMap.values());
-//        } catch (SQLException e) {
-//            log.error(e.getMessage(), e);
-//            return new ArrayList<>();
-//        }
-//    }
 
     @Override
     public int numberOfRows() {

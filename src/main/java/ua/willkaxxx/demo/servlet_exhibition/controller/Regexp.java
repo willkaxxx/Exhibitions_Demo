@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.controller;
 
+
 public final class Regexp {
     public static String EMAIL = "[\\S]{3,}@[\\S]{1,}";
     public static String PASSWORD = "[\\S]{5,}";

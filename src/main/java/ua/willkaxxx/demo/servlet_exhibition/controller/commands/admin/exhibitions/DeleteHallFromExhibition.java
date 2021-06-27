@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ *  This class implements command pattern and deletes hall from Exhibition
+ */
 public class DeleteHallFromExhibition implements Command {
     ExhibitionService exhibitionService;
 

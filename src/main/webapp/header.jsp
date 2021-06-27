@@ -26,7 +26,7 @@
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}?sessionLocale=en">
                                 <img src="https://image.flaticon.com/icons/png/512/197/197374.png" width="24" height="24">
                             </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}?sessionLocale=ua">
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}?sessionLocale=uk">
                                 <img src="https://image.flaticon.com/icons/png/512/197/197572.png" width="24" height="24">
                             </a></li>
                         </ul>

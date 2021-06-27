@@ -3,11 +3,12 @@
   <component name="ResourceBundleManager">
     <file url="file://$PROJECT_DIR$/src/main/resources/local.properties" />
     <file url="file://$PROJECT_DIR$/src/main/resources/local_en.properties" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/local_ua.properties" />
     <custom-resource-bundle>
       <file value="file://$PROJECT_DIR$/src/main/resources/local.properties" />
-      <file value="file://$PROJECT_DIR$/src/main/resources/local_en.properties" />
-      <file value="file://$PROJECT_DIR$/src/main/resources/local_ua.properties" />
+      <base-name>local</base-name>
+    </custom-resource-bundle>
+    <custom-resource-bundle>
+      <file value="file://$PROJECT_DIR$/src/main/resources/local.properties" />
       <base-name>local</base-name>
     </custom-resource-bundle>
   </component>

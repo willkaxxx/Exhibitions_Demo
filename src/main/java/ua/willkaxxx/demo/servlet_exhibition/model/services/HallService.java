@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.model.services;
 
+import ua.willkaxxx.demo.servlet_exhibition.model.ConfigReader;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.HallDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Hall;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class HallService {
-    private final int HALLS_PER_PAGE = 3;
+    private final int HALLS_PER_PAGE = Integer.parseInt(ConfigReader.getInstance().getProperty("page.size"));
 
     public List<Hall> getAllHalls(){
         try(HallDao hallDao = JDBCDaoFactory.getInstance().createHallDao()){

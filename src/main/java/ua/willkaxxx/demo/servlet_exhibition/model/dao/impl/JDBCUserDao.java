@@ -213,9 +213,10 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void delete(int id) {
-        final String query = "delete from users where user_id = ?;";
+        final String query = "delete from users where user_id = ? ; ";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
+            preparedStatement.execute();
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.model.services;
 
+import ua.willkaxxx.demo.servlet_exhibition.model.ConfigReader;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.ExhibitionDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExhibitionService {
-    private final int EXHIBITIONS_PER_PAGE = 3;
+    private final int EXHIBITIONS_PER_PAGE = Integer.parseInt(ConfigReader.getInstance().getProperty("page.size"));
 
     public Optional<Exhibition> getExhibition(int id) {
         try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {

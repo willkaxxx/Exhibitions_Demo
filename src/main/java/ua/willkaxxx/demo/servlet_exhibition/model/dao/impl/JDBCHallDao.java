@@ -74,6 +74,8 @@ public class JDBCHallDao implements HallDao {
                 exhibitionMapper.makeUnique(exhibitionMap, exhibition);
             }
             hall.setExhibitions(new ArrayList<>(exhibitionMap.values()));
+            if(hall.getId() < 1)
+                return Optional.empty();
             return Optional.of(hall);
         } catch (SQLException e) {
             log.error(e.getMessage(), e);

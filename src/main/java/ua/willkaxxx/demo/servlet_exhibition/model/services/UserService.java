@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.model.services;
 
+import ua.willkaxxx.demo.servlet_exhibition.model.dao.DaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.UserDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
 import ua.willkaxxx.demo.servlet_exhibition.model.entity.Exhibition;
@@ -10,8 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserService {
+
     public int createUser(User user) throws SQLException {
-        try(UserDao userDao = JDBCDaoFactory.getInstance().createUserDao()){
+        try(UserDao userDao = DaoFactory.getInstance().createUserDao()){
             userDao.create(user);
         }
         return user.getId();
@@ -23,13 +25,11 @@ public class UserService {
         }
     }
 
-    public boolean enroll(Exhibition exhibition, User user){
+    public void enroll(Exhibition exhibition, User user){
         try(UserDao userDao = JDBCDaoFactory.getInstance().createUserDao()){
             if(userDao.enroll(exhibition, user)){
                 user.getExhibitions().add(exhibition);
-                return true;
             }
-            return false;
         }
     }
 
