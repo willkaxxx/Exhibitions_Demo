@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
-
+/**
+ *  This class implements command pattern and shows home page
+ */
 public class ShowHome implements Command {
     ExhibitionService exhibitionService;
 

@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ *  This class implements command pattern and adds hall to Exhibition
+ */
 public class AddHallToExhibition implements Command {
     ExhibitionService exhibitionService;
 

@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ *  This class implements command pattern and shows manageHalls page
+ */
 public class ManageHalls implements Command {
     HallService hallService;
 

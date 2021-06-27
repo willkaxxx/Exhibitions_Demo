@@ -9,7 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+/**
+ *  This class implements command pattern and logs in a user
+ */
 public class Login implements Command {
     private final Logger log = Logger.getLogger(Login.class);
     AuthService authService;

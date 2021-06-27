@@ -26,7 +26,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ *  This class is Servlet that handles all input requests
+ */
 @WebServlet(name = "Servlet", value = "/exhibitions/*")
 public class Servlet extends HttpServlet {
     private final Logger log = Logger.getLogger(Servlet.class);

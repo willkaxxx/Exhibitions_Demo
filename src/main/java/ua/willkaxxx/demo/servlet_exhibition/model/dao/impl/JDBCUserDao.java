@@ -43,7 +43,6 @@ public class JDBCUserDao implements UserDao {
             }
             connection.commit();
             connection.setAutoCommit(true);
-            log.info("Inserted into db: " + entity);
         } catch (SQLException e) {
             log.error(e.getMessage());
             try {
@@ -79,8 +78,7 @@ public class JDBCUserDao implements UserDao {
             user.setExhibitions(new ArrayList<>(exhibitionMap.values()));
             return Optional.of(user);
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-            e.printStackTrace();
+            log.error(e.getMessage());
             return Optional.empty();
         }
     }
@@ -94,7 +92,7 @@ public class JDBCUserDao implements UserDao {
             preparedStatement.execute();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Sql exception, exception code: " + e.getSQLState());
             return false;
         }
     }
@@ -172,8 +170,7 @@ public class JDBCUserDao implements UserDao {
             }
             return new ArrayList<>(userMap.values());
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-            e.printStackTrace();
+            log.error(e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -206,8 +203,7 @@ public class JDBCUserDao implements UserDao {
                 log.error("Error while rollback");
                 throw new RuntimeException(ex);
             }
-            log.error(e.getMessage(), e);
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -218,8 +214,7 @@ public class JDBCUserDao implements UserDao {
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 

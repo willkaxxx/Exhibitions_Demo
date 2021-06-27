@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
+/**
+ *  This class implements command pattern and saves Hall
+ */
 public class SaveHall implements Command {
     HallService hallService;
 

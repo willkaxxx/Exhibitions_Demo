@@ -55,14 +55,13 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             connection.setAutoCommit(true);
             log.info("Inserted into db: " + entity);
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException ex) {
                 log.error("Error while rollback");
                 throw new RuntimeException(ex);
             }
-            e.printStackTrace();
         }
     }
 
@@ -105,8 +104,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             exhibition.setHalls(new ArrayList<>(hallMap.values()));
             return Optional.of(exhibition);
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-            e.printStackTrace();
+            log.error(e.getMessage());
             return Optional.empty();
         }
     }
@@ -118,7 +116,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             preparedStatement.setInt(1, hallId);
             return preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Sql exception, exception code: " + e.getSQLState());
             return false;
         }
     }
@@ -130,7 +128,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             preparedStatement.setInt(2, exhibitionId);
             return preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Sql exception, exception code: " + e.getSQLState());
             return false;
         }
     }
@@ -165,8 +163,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             }
             return new ArrayList<>(exhibitionMap.values());
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-            e.printStackTrace();
+            log.error(e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -204,8 +201,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
                 log.error("Error while rollback");
                 throw new RuntimeException(ex);
             }
-            log.error(e.getMessage(), e);
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -232,8 +228,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
                 log.error("Error while rollback");
                 throw new RuntimeException(ex);
             }
-            log.error(e.getMessage(), e);
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -242,6 +237,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         try {
             connection.close();
         } catch (SQLException e) {
+            log.error("Error closing db connection");
             throw new RuntimeException(e);
         }
     }
@@ -260,7 +256,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             }
             return exhibitionList;
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -295,7 +291,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             }
             return exhibitionList;
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -308,7 +304,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             rs.next();
             return rs.getInt("count(*)");
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
             return 0;
         }
     }
@@ -330,7 +326,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             rs.next();
             return rs.getInt("count(*)");
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
             return 0;
         }
     }

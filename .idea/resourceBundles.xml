@@ -11,5 +11,10 @@
       <file value="file://$PROJECT_DIR$/src/main/resources/local.properties" />
       <base-name>local</base-name>
     </custom-resource-bundle>
+    <custom-resource-bundle>
+      <file value="file://$PROJECT_DIR$/src/main/resources/local.properties" />
+      <file value="file://$PROJECT_DIR$/src/main/resources/local_en.properties" />
+      <base-name>local</base-name>
+    </custom-resource-bundle>
   </component>
 </project>

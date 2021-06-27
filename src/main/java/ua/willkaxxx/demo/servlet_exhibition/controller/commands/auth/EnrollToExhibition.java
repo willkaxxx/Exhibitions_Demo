@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-
+/**
+ *  This class implements command pattern and enrolls user to exhibition
+ */
 public class EnrollToExhibition implements Command {
     UserService userService;
     public EnrollToExhibition(UserService userService){

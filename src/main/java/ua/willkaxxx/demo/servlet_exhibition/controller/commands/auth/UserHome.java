@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-
+/**
+ *  This class implements command pattern and shows user's page
+ */
 public class UserHome implements Command {
     UserService userService;
     public UserHome(UserService userService){

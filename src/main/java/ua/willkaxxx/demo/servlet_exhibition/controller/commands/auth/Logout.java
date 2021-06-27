@@ -7,7 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+/**
+ *  This class implements command pattern and logs out a logged user
+ */
 public class Logout implements Command {
     AuthService authService;
 

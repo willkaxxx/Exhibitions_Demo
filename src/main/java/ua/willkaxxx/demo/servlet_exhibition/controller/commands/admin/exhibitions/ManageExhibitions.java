@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-
+/**
+ *  This class implements command pattern and shows manageExhibitions page
+ */
 public class ManageExhibitions implements Command {
     ExhibitionService exhibitionService;
 

@@ -4,7 +4,6 @@ import org.apache.commons.dbcp.BasicDataSource;
 import ua.willkaxxx.demo.servlet_exhibition.model.ConfigReader;
 
 import javax.sql.DataSource;
-import java.util.Properties;
 
 public class ConnectionPoolHolder {
     private static volatile DataSource dataSource;
@@ -15,12 +14,12 @@ public class ConnectionPoolHolder {
             synchronized (ConnectionPoolHolder.class) {
                 if (dataSource == null) {
                     BasicDataSource ds = new BasicDataSource();
-                    ds.setUrl(ConfigReader.getInstance().getProperty("database.connectionUrl"));
-                    ds.setUsername(ConfigReader.getInstance().getProperty("database.username"));
-                    ds.setPassword(ConfigReader.getInstance().getProperty("database.password"));
-                    ds.setMinIdle(Integer.parseInt(ConfigReader.getInstance().getProperty("database.minIdle")));
-                    ds.setMaxIdle(Integer.parseInt(ConfigReader.getInstance().getProperty("database.maxIdle")));
-                    ds.setMaxOpenPreparedStatements(Integer.parseInt(ConfigReader.getInstance().getProperty("database.maxOpenPreparedStatements")));
+                    ds.setUrl(ConfigReader.getProperties().getProperty("database.connectionUrl"));
+                    ds.setUsername(ConfigReader.getProperties().getProperty("database.username"));
+                    ds.setPassword(ConfigReader.getProperties().getProperty("database.password"));
+                    ds.setMinIdle(Integer.parseInt(ConfigReader.getProperties().getProperty("database.minIdle")));
+                    ds.setMaxIdle(Integer.parseInt(ConfigReader.getProperties().getProperty("database.maxIdle")));
+                    ds.setMaxOpenPreparedStatements(Integer.parseInt(ConfigReader.getProperties().getProperty("database.maxOpenPreparedStatements")));
                     dataSource = ds;
                 }
             }

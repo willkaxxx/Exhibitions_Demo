@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-
+/**
+ *  This class implements command pattern and register a user
+ */
 public class Registration implements Command {
     private final Logger log = Logger.getLogger(Registration.class);
     AuthService authService;

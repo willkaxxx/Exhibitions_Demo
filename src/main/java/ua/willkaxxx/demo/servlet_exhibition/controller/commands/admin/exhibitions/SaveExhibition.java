@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-
+/**
+ *  This class implements command pattern and saves Exhibition
+ */
 public class SaveExhibition implements Command {
     ExhibitionService exhibitionService;
 

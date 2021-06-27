@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExhibitionService {
-    private final int EXHIBITIONS_PER_PAGE = Integer.parseInt(ConfigReader.getInstance().getProperty("page.size"));
+    private final int EXHIBITIONS_PER_PAGE = Integer.parseInt(ConfigReader.getProperties().getProperty("page.size"));
 
     public Optional<Exhibition> getExhibition(int id) {
         try (ExhibitionDao exhibitionDao = JDBCDaoFactory.getInstance().createExhibitionDao()) {

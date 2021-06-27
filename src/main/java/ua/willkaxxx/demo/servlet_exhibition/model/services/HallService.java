@@ -1,5 +1,6 @@
 package ua.willkaxxx.demo.servlet_exhibition.model.services;
 
+import org.apache.log4j.Logger;
 import ua.willkaxxx.demo.servlet_exhibition.model.ConfigReader;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.HallDao;
 import ua.willkaxxx.demo.servlet_exhibition.model.dao.impl.JDBCDaoFactory;
@@ -11,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class HallService {
-    private final int HALLS_PER_PAGE = Integer.parseInt(ConfigReader.getInstance().getProperty("page.size"));
+    private final Logger log = Logger.getLogger(HallService.class);
+    private final int HALLS_PER_PAGE = Integer.parseInt(ConfigReader.getProperties().getProperty("page.size"));
 
     public List<Hall> getAllHalls(){
         try(HallDao hallDao = JDBCDaoFactory.getInstance().createHallDao()){
@@ -35,7 +37,7 @@ public class HallService {
             }
             return hall;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            log.error("Sql exception, exception code: " + ex.getSQLState());
             return hall;
         }
     }
